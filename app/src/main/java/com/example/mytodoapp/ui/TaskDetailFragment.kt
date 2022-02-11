@@ -1,10 +1,11 @@
-package com.example.mytodoapp
+package com.example.mytodoapp.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.mytodoapp.R
 
 class TaskDetailFragment : Fragment() {
 
