@@ -1,10 +1,11 @@
 package com.example.mytodoapp.data.repository
 
+import androidx.lifecycle.MutableLiveData
 import com.example.mytodoapp.data.model.Task
 
 class TaskDataSource {
-    fun loadTasks(): MutableList<Task> {
-        return mutableListOf(
+    fun loadTasks(): List<Task> {
+        return listOf(
             Task(false, "task1", "this is the task1."),
             Task(false, "task2", "this is the task2."),
             Task(true, "task3", "this is the task3."),
