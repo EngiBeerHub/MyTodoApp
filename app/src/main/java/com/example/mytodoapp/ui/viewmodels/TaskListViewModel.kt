@@ -19,6 +19,7 @@ class TaskListViewModel : ViewModel() {
     }
 
     // a simple fun to load Task list from data layer.
+    // TODO: make asynchronous after implementing Room library.
     private fun loadTasks() {
         tasks.value = TaskDataSource().loadTasks()
     }

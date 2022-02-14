@@ -16,9 +16,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildFeatures {
-        dataBinding true
-    }
+    // enable dataBinding
+    buildFeatures.dataBinding = true
 
     buildTypes {
         release {
@@ -68,5 +67,9 @@ dependencies {
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 
     // ViewModel and LiveData
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    def lifecycleVersion = "2.2.0"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+
+    // by viewModels()
+    implementation 'androidx.fragment:fragment-ktx:1.4.1'
 }
