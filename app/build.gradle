@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -17,7 +18,9 @@ android {
     }
 
     // enable dataBinding
-    buildFeatures.dataBinding = true
+    buildFeatures {
+        dataBinding true
+    }
 
     buildTypes {
         release {

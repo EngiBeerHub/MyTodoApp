@@ -8,19 +8,20 @@ import com.example.mytodoapp.data.repository.TaskDataSource
 
 class TaskListViewModel : ViewModel() {
     // task list to show task list fragment
-    private val tasks = MutableLiveData<List<Task>>()
+    // backing property
+    private val _tasks = MutableLiveData<List<Task>>()
 
-    // load tasks in this view model
-    fun getTasks(): LiveData<List<Task>> {
-        if (tasks.value == null) {
-            loadTasks()
-        }
-        return tasks
-    }
+    // property accessible from other classes
+    val tasks: LiveData<List<Task>> = _tasks
 
     // a simple fun to load Task list from data layer.
     // TODO: make asynchronous after implementing Room library.
     private fun loadTasks() {
-        tasks.value = TaskDataSource().loadTasks()
+        _tasks.value = TaskDataSource().loadTasks()
+    }
+
+    // Initially load tasks
+    init {
+        loadTasks()
     }
 }
