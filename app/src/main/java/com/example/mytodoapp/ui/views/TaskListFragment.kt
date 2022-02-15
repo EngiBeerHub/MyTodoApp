@@ -17,7 +17,7 @@ class TaskListFragment : Fragment() {
     // Binding object instance corresponding to the fragment_task_list.xml
     private lateinit var binding: FragmentTaskListBinding
 
-    // hold TaskListViewModel
+    // ViewModel which this fragment depends on
     private val taskListViewModel: TaskListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,9 +32,8 @@ class TaskListFragment : Fragment() {
         binding = FragmentTaskListBinding.inflate(inflater, container, false)
         // instantiate task list recycler view
         val taskRecyclerView = binding.taskRecyclerView
-        // load Task list from TaskListViewModel and observe to attach Tasks to adapter
+        // attach Task list LiveData to RecyclerView
         taskListViewModel.tasks.observe(viewLifecycleOwner) {
-            // instantiate TaskAdapter
             val taskAdapter = TaskAdapter(it)
             taskRecyclerView.adapter = taskAdapter
         }
