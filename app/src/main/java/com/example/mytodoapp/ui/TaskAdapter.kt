@@ -4,10 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mytodoapp.R
-import com.example.mytodoapp.data.model.Task
+import com.example.mytodoapp.data.Task
 import com.google.android.material.textfield.TextInputEditText
 
 class TaskAdapter(private val taskListData: List<Task>) :
