@@ -9,14 +9,20 @@ interface TaskDao {
     fun getAll(): Flow<List<Task>>
 
     @Query("select * from Task where id = :id")
-    fun findById(id: Int): Task
+    suspend fun findById(id: Int): Task
+
+    @Query("select count(*) from Task")
+    suspend fun getRowCount(): Int
 
     @Insert
-    fun insert(task: Task)
+    suspend fun insert(task: Task)
+
+    @Insert
+    suspend fun insertAll(vararg tasks: Task)
 
     @Update
-    fun update(task: Task)
+    suspend fun update(task: Task)
 
     @Delete
-    fun delete(task: Task)
+    suspend fun delete(task: Task)
 }
