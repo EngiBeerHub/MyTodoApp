@@ -12,7 +12,7 @@ import com.example.mytodoapp.databinding.TaskRowBinding
 class TaskAdapter(private val taskListData: List<Task>) :
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
-    class TaskViewHolder(private var binding: TaskRowBinding) :
+    class TaskViewHolder(private val binding: TaskRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
             binding.apply {

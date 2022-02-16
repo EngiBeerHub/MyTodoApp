@@ -1,8 +1,6 @@
 package com.example.mytodoapp.ui.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -14,11 +12,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class TaskListViewModel() : ViewModel() {
-    // get all Tasks from Room database. Any updates are reflected realtime.
-    private val taskDao: TaskDao = ToDoApplication.database.taskDao()
-
-    // All Tasks not using Paging
-    val tasks: LiveData<List<Task>> = taskDao.getAll().asLiveData()
 
     companion object {
         // Constants for paging
@@ -28,9 +21,12 @@ class TaskListViewModel() : ViewModel() {
         private const val PREFETCH_DISTANCE = 20
     }
 
+    // get all Tasks from Room database. Any updates are reflected realtime.
+    private val taskDao: TaskDao = ToDoApplication.database.taskDao()
+
     // All Tasks using Paging
-    val tasksByTitle = LivePagedListBuilder(
-        taskDao.getAllByTitle(),
+    val liveAllTasks = LivePagedListBuilder(
+        taskDao.getAll(),
         PagedList.Config.Builder()
             .setPageSize(PAGE_SIZE)
             .setEnablePlaceholders(ENABLE_PLACEHOLDERS)
