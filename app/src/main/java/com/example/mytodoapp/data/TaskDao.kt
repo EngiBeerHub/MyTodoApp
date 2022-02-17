@@ -1,12 +1,12 @@
 package com.example.mytodoapp.data
 
-import androidx.paging.DataSource
+import androidx.paging.PagingSource
 import androidx.room.*
 
 @Dao
 interface TaskDao {
     @Query("select * from Task")
-    fun getAll(): DataSource.Factory<Int, Task>
+    fun getAll(): PagingSource<Int, Task>
 
     @Query("select * from Task where id = :id")
     suspend fun findById(id: Int): Task

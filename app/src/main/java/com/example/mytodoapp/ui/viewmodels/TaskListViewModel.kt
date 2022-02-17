@@ -2,8 +2,8 @@ package com.example.mytodoapp.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.example.mytodoapp.ToDoApplication
 import com.example.mytodoapp.data.Task
 import com.example.mytodoapp.data.TaskDao
@@ -11,29 +11,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class TaskListViewModel() : ViewModel() {
+class TaskListViewModel : ViewModel() {
 
     companion object {
-        // Constants for paging
+        // Constants for Paging
         private const val PAGE_SIZE = 30
-        private const val ENABLE_PLACEHOLDERS = true
-        private const val INITIAL_LOAD_SIZE_HINT = 40
-        private const val PREFETCH_DISTANCE = 20
     }
 
-    // get all Tasks from Room database. Any updates are reflected realtime.
+    // DAO to handle Task table
     private val taskDao: TaskDao = ToDoApplication.database.taskDao()
 
-    // All Tasks using Paging
-    val liveAllTasks = LivePagedListBuilder(
-        taskDao.getAll(),
-        PagedList.Config.Builder()
-            .setPageSize(PAGE_SIZE)
-            .setEnablePlaceholders(ENABLE_PLACEHOLDERS)
-            .setInitialLoadSizeHint(INITIAL_LOAD_SIZE_HINT)
-            .setPrefetchDistance(PREFETCH_DISTANCE)
-            .build()
-    ).build()
+    // All Tasks using Paging 3
+    val liveAllTasks = Pager(
+        PagingConfig(
+            pageSize = PAGE_SIZE,
+            initialLoadSize = PAGE_SIZE
+        )
+    ) {
+        taskDao.getAll()
+    }.flow
 
     init {
         // Insert sample data when no rows for test purpose

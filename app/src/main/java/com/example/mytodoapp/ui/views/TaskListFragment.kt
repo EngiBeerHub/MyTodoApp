@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.mytodoapp.databinding.FragmentTaskListBinding
-import com.example.mytodoapp.ui.TaskPagedListAdapter
+import com.example.mytodoapp.ui.TaskAdapter
 import com.example.mytodoapp.ui.viewmodels.TaskListViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * Fragment to show All Task list
@@ -18,30 +21,23 @@ class TaskListFragment : Fragment() {
 
     // Binding object instance corresponding to the fragment_task_list.xml
     private lateinit var binding: FragmentTaskListBinding
+
     // ViewModel which this fragment depends on
     private val taskListViewModel: TaskListViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentTaskListBinding.inflate(inflater, container, false)
 
-        // attach Task list LiveData to RecyclerView not using Paging
-//        taskListViewModel.tasks.observe(this.viewLifecycleOwner) {
-//            val taskAdapter = TaskAdapter(it)
-//            taskRecyclerView.adapter = taskAdapter
-//        }
-
         // set PagedListAdapter to the RecyclerView
-        val adapter = TaskPagedListAdapter()
-        taskListViewModel.liveAllTasks.observe(this.viewLifecycleOwner) {
-            adapter.submitList(it)
+        val adapter = TaskAdapter()
+        lifecycleScope.launch {
+            taskListViewModel.liveAllTasks.collectLatest {
+                adapter.submitData(it)
+            }
         }
         binding.taskRecyclerView.adapter = adapter
 

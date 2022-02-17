@@ -2,6 +2,8 @@ package com.example.mytodoapp.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mytodoapp.data.Task
 import com.example.mytodoapp.databinding.TaskRowBinding
@@ -9,15 +11,16 @@ import com.example.mytodoapp.databinding.TaskRowBinding
 /**
  * Adapter for simple RecyclerView
  */
-class TaskAdapter(private val taskListData: List<Task>) :
-    RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+class TaskAdapter : PagingDataAdapter<Task, TaskAdapter.TaskViewHolder>(diffCallback) {
 
     class TaskViewHolder(private val binding: TaskRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(task: Task) {
+        fun bind(task: Task?) {
             binding.apply {
-                taskIsDone.isChecked = task.isDone
-                taskTitle.setText(task.title)
+                task?.let {
+                    taskIsDone.isChecked = it.isDone
+                    taskTitle.setText(it.title)
+                }
             }
         }
     }
@@ -29,10 +32,20 @@ class TaskAdapter(private val taskListData: List<Task>) :
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        val currentTask = taskListData[position]
+        val currentTask = getItem(position)
         holder.bind(currentTask)
     }
 
-    override fun getItemCount() = taskListData.size
+    companion object {
+        private val diffCallback = object : DiffUtil.ItemCallback<Task>() {
+            override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+                return oldItem.id == newItem.id
+            }
 
+            override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
+                return oldItem == newItem
+            }
+
+        }
+    }
 }
