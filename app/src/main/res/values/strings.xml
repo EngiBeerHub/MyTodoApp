@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MyTodoApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="fab_content_description">Add new task</string>
+    <string name="hint_task_title">Task Title <font color='#FF0000'>*</font></string>
+    <string name="hint_task_content">Task Content <font color='#FF0000'>*</font></string>
+    <string name="button_save">Save</string>
 </resources>
