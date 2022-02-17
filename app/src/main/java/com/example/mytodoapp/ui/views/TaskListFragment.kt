@@ -5,8 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.mytodoapp.databinding.FragmentTaskListBinding
 import com.example.mytodoapp.ui.TaskAdapter
 import com.example.mytodoapp.ui.viewmodels.TaskListViewModel
@@ -22,8 +23,8 @@ class TaskListFragment : Fragment() {
     // Binding object instance corresponding to the fragment_task_list.xml
     private lateinit var binding: FragmentTaskListBinding
 
-    // ViewModel which this fragment depends on
-    private val taskListViewModel: TaskListViewModel by viewModels()
+    // Shared ViewModel which this fragment depends on
+    private val taskListViewModel: TaskListViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,9 +40,16 @@ class TaskListFragment : Fragment() {
                 adapter.submitData(it)
             }
         }
-        binding.taskRecyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.floatingActionButton.setOnClickListener {
+            findNavController().navigate(TaskListFragmentDirections.actionTaskListFragmentToTaskDetailFragment())
+        }
     }
 
 }

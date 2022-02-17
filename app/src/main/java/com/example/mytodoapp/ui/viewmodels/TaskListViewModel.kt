@@ -31,6 +31,29 @@ class TaskListViewModel : ViewModel() {
         taskDao.getAll()
     }.flow
 
+    private fun insertTask(task: Task) {
+        viewModelScope.launch { taskDao.insert(task) }
+    }
+
+    fun addNewTask(isDone: Boolean = false, title: String, content: String = "") {
+        // id is 0 because of the auto increment.
+        val newTask = Task(0, isDone, title, content)
+        insertTask(newTask)
+    }
+
+    private fun updateTask(task: Task) {
+        viewModelScope.launch { taskDao.update(task) }
+    }
+
+    fun deleteTask(task: Task) {
+        viewModelScope.launch { taskDao.delete(task) }
+    }
+
+    fun doneUndoneTask(task: Task, isDone: Boolean) {
+        val newTask = task.copy(isDone = isDone)
+        updateTask(newTask)
+    }
+
     init {
         // Insert sample data when no rows for test purpose
         viewModelScope.launch {
