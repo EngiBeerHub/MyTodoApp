@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.mytodoapp.databinding.FragmentTaskDetailBinding
 import com.example.mytodoapp.ui.viewmodels.TaskDetailViewModel
 
@@ -18,7 +19,11 @@ class TaskDetailFragment : Fragment() {
     // Binding object instance corresponding to the fragment_task_list.xml
     private lateinit var binding: FragmentTaskDetailBinding
 
+    // ViewModel corresponding to this Fragment
     private val viewModel: TaskDetailViewModel by viewModels()
+
+    // arguments from Task List Fragment
+    private val navigationArgs: TaskDetailFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,4 +63,10 @@ class TaskDetailFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val taskId = navigationArgs.taskId
+        // TODO: if taskId is passed, bind the Task to View.
+        viewModel.bindTask(taskId)
+    }
 }

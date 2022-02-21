@@ -32,8 +32,13 @@ class TaskListFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentTaskListBinding.inflate(inflater, container, false)
 
-        // set PagingDataAdapter to the RecyclerView
-        val adapter = TaskAdapter()
+        // Set PagingDataAdapter to the RecyclerView
+        val adapter = TaskAdapter {
+            // Tap Task to move to the Detail
+            val action =
+                TaskListFragmentDirections.actionTaskListFragmentToTaskDetailFragment(it.id)
+            findNavController().navigate(action)
+        }
         lifecycleScope.launch {
             viewModel.liveAllTasks.collectLatest {
                 adapter.submitData(it)
@@ -47,7 +52,7 @@ class TaskListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // tap FAB to move to Task Detail Fragment
+        // Tap FAB to move to Task Detail Fragment
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(TaskListFragmentDirections.actionTaskListFragmentToTaskDetailFragment())
         }

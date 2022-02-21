@@ -11,7 +11,8 @@ import com.example.mytodoapp.databinding.TaskRowBinding
 /**
  * Adapter for simple RecyclerView
  */
-class TaskAdapter : PagingDataAdapter<Task, TaskAdapter.TaskViewHolder>(diffCallback) {
+class TaskAdapter(private val onItemClicked: (Task) -> Unit) :
+    PagingDataAdapter<Task, TaskAdapter.TaskViewHolder>(diffCallback) {
 
     class TaskViewHolder(private val binding: TaskRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -33,6 +34,7 @@ class TaskAdapter : PagingDataAdapter<Task, TaskAdapter.TaskViewHolder>(diffCall
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         val currentTask = getItem(position)
+        holder.itemView.setOnClickListener { onItemClicked(currentTask!!) }
         holder.bind(currentTask)
     }
 
@@ -45,7 +47,6 @@ class TaskAdapter : PagingDataAdapter<Task, TaskAdapter.TaskViewHolder>(diffCall
             override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
                 return oldItem == newItem
             }
-
         }
     }
 }

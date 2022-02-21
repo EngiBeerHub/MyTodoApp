@@ -23,5 +23,10 @@
         android:id="@+id/taskDetailFragment"
         android:name="com.example.mytodoapp.ui.views.TaskDetailFragment"
         android:label="fragment_task_detail"
-        tools:layout="@layout/fragment_task_detail" />
+        tools:layout="@layout/fragment_task_detail" >
+        <argument
+            android:name="taskId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>

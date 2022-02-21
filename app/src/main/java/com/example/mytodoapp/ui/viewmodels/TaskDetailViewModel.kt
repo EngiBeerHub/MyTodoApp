@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mytodoapp.ToDoApplication
 import com.example.mytodoapp.data.Task
 import com.example.mytodoapp.data.TaskDao
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class TaskDetailViewModel : ViewModel() {
 
@@ -18,6 +18,7 @@ class TaskDetailViewModel : ViewModel() {
     val isBackToList: LiveData<Boolean> = _isBackToList
 
     // Values for Task data
+    private val taskId: Int = 0
     val taskTitle: MutableLiveData<String> = MutableLiveData()
     val taskContent: MutableLiveData<String> = MutableLiveData()
 
@@ -30,7 +31,13 @@ class TaskDetailViewModel : ViewModel() {
     // DAO to handle Task table
     private val taskDao: TaskDao = ToDoApplication.database.taskDao()
 
-    // add new Task to Room and update values for view state
+    // Set current Task if exist
+    fun bindTask(taskId: Int) {
+        // if taskId is default value, this is a new Task
+        if (taskId == 0) return
+    }
+
+    // Add new Task to Room and update values for view state
     fun addNewTask() {
         if (isEntryValid()) {
             _isEntryValid.value = true
@@ -56,6 +63,10 @@ class TaskDetailViewModel : ViewModel() {
     private fun insertTask(task: Task) {
         viewModelScope.launch { taskDao.insert(task) }
     }
+
+    // TODO: this method
+//    private fun retrieveTask(taskId: Int): Task
+
 
 //    private fun updateTask(task: Task) {
 //        viewModelScope.launch { taskDao.update(task) }
