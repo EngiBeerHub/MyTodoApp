@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.mytodoapp.ToDoApplication
 import com.example.mytodoapp.data.Task
 import com.example.mytodoapp.data.TaskDao
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TaskDetailViewModel : ViewModel() {
 
@@ -31,10 +33,17 @@ class TaskDetailViewModel : ViewModel() {
     // DAO to handle Task table
     private val taskDao: TaskDao = ToDoApplication.database.taskDao()
 
-    // Set current Task if exist
+    // Bind current Task to the Detail if it exist
     fun bindTask(taskId: Int) {
         // if taskId is default value, this is a new Task
         if (taskId == 0) return
+        viewModelScope.launch {
+            val task = withContext(Dispatchers.Default) {
+                taskDao.findById(taskId)
+            }
+            taskTitle.value = task.title
+            taskContent.value = task.content
+        }
     }
 
     // Add new Task to Room and update values for view state
@@ -63,10 +72,6 @@ class TaskDetailViewModel : ViewModel() {
     private fun insertTask(task: Task) {
         viewModelScope.launch { taskDao.insert(task) }
     }
-
-    // TODO: this method
-//    private fun retrieveTask(taskId: Int): Task
-
 
 //    private fun updateTask(task: Task) {
 //        viewModelScope.launch { taskDao.update(task) }

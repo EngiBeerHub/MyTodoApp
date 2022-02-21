@@ -66,7 +66,7 @@ class TaskDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val taskId = navigationArgs.taskId
-        // TODO: if taskId is passed, bind the Task to View.
+        // If taskId is passed, bind the Task to View.
         viewModel.bindTask(taskId)
     }
 }
