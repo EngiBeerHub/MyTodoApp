@@ -7,11 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.mytodoapp.ui.viewmodels.TaskListViewModel" />
-
-        <variable
-            name="fragment"
-            type="com.example.mytodoapp.ui.views.TaskDetailFragment" />
+            type="com.example.mytodoapp.ui.viewmodels.TaskDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,7 +30,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="textAutoComplete|textCapWords"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="@={viewModel.taskTitle}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -51,14 +48,15 @@
                 android:id="@+id/task_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textAutoComplete|textCapWords" />
+                android:inputType="textAutoComplete|textCapWords"
+                android:text="@={viewModel.taskContent}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_layout"
-            android:onClickListener="@{() -> fragment.addNewTask()}"
+            android:onClick="@{() -> viewModel.addNewTask()}"
             android:text="@string/button_save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

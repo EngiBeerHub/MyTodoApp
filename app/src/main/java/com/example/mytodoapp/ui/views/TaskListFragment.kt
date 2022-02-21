@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.mytodoapp.databinding.FragmentTaskListBinding
@@ -23,8 +23,7 @@ class TaskListFragment : Fragment() {
     // Binding object instance corresponding to the fragment_task_list.xml
     private lateinit var binding: FragmentTaskListBinding
 
-    // Shared ViewModel which this fragment depends on
-    private val viewModel: TaskListViewModel by activityViewModels()
+    private val viewModel: TaskListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
