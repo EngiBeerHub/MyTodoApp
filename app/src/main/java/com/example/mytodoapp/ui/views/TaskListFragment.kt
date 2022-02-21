@@ -24,7 +24,7 @@ class TaskListFragment : Fragment() {
     private lateinit var binding: FragmentTaskListBinding
 
     // Shared ViewModel which this fragment depends on
-    private val taskListViewModel: TaskListViewModel by activityViewModels()
+    private val viewModel: TaskListViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,10 +33,10 @@ class TaskListFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentTaskListBinding.inflate(inflater, container, false)
 
-        // set PagedListAdapter to the RecyclerView
+        // set PagingDataAdapter to the RecyclerView
         val adapter = TaskAdapter()
         lifecycleScope.launch {
-            taskListViewModel.liveAllTasks.collectLatest {
+            viewModel.liveAllTasks.collectLatest {
                 adapter.submitData(it)
             }
         }
@@ -47,6 +47,8 @@ class TaskListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // tap FAB to move to Task Detail Fragment
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(TaskListFragmentDirections.actionTaskListFragmentToTaskDetailFragment())
         }

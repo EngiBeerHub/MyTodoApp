@@ -19,7 +19,7 @@ class TaskAdapter : PagingDataAdapter<Task, TaskAdapter.TaskViewHolder>(diffCall
             binding.apply {
                 task?.let {
                     taskIsDone.isChecked = it.isDone
-                    taskTitle.setText(it.title)
+                    taskTitle.text = it.title
                 }
             }
         }

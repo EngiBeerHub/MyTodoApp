@@ -5,6 +5,13 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.example.mytodoapp.ui.viewmodels.TaskListViewModel" />
+
+        <variable
+            name="fragment"
+            type="com.example.mytodoapp.ui.views.TaskDetailFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,6 +58,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_layout"
+            android:onClickListener="@{() -> fragment.addNewTask()}"
             android:text="@string/button_save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

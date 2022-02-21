@@ -10,6 +10,7 @@ import com.example.mytodoapp.data.TaskDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.annotations.NotNull
 
 class TaskListViewModel : ViewModel() {
 
@@ -36,8 +37,7 @@ class TaskListViewModel : ViewModel() {
     }
 
     fun addNewTask(isDone: Boolean = false, title: String, content: String = "") {
-        // id is 0 because of the auto increment.
-        val newTask = Task(0, isDone, title, content)
+        val newTask = Task(isDone = isDone, title = title, content = content)
         insertTask(newTask)
     }
 
