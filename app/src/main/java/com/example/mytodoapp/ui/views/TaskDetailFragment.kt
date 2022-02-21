@@ -1,12 +1,15 @@
 package com.example.mytodoapp.ui.views
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.mytodoapp.databinding.FragmentTaskDetailBinding
 import com.example.mytodoapp.ui.viewmodels.TaskDetailViewModel
 
@@ -26,6 +29,20 @@ class TaskDetailFragment : Fragment() {
                 Toast.makeText(context, "Please input title.", Toast.LENGTH_SHORT).show()
             }
         }
+        // When the Task Detail Fragment is done, go back to the Task List Fragment
+        viewModel.isBackToList.observe(this) {
+            if (it == true) {
+                // hide keyboard
+                val manager =
+                    activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                manager.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
+                // show Toast
+                Toast.makeText(context, "Task is registered successfully.", Toast.LENGTH_SHORT)
+                    .show()
+                // go back to the Task List Fragment
+                findNavController().popBackStack()
+            }
+        }
     }
 
     override fun onCreateView(
@@ -34,10 +51,10 @@ class TaskDetailFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentTaskDetailBinding.inflate(inflater, container, false)
-        // bind viewModel between view and
+        // bind viewModel and view
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
-        // set initial data from Room
+        // TODO: set initial data from Room when updating the existing Task
         return binding.root
     }
 
