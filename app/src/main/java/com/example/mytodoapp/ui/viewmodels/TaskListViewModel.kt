@@ -31,6 +31,14 @@ class TaskListViewModel : ViewModel() {
         taskDao.getAll()
     }.flow
 
+    // Make the Task done or undone.
+    fun doneUndoneTask(task: Task, isDone: Boolean) {
+        val updatedTask = Task(task.id, isDone, task.title, task.content)
+        viewModelScope.launch {
+            taskDao.update(updatedTask)
+        }
+    }
+
     init {
         // Insert sample data when no rows for test purpose
         viewModelScope.launch {
