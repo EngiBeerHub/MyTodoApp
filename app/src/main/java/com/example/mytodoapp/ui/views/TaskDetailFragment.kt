@@ -25,15 +25,31 @@ class TaskDetailFragment : Fragment() {
     // arguments from Task List Fragment
     private val navigationArgs: TaskDetailFragmentArgs by navArgs()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        binding = FragmentTaskDetailBinding.inflate(inflater, container, false)
+        // bind viewModel and view
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         /**
          * Subscribe TaskDetailViewModel's events
+         * and handle changing View
          */
         // When the input validation check is error, Show a Toast.
-        viewModel.mode.observe(this) {
-            when (it) {
+        viewModel.mode.observe(viewLifecycleOwner) { mode ->
+            when (mode) {
+                TaskDetailViewModel.Mode.CREATE -> {
+                    // Hide the delete button when CREATE mode.
+                    binding.buttonDelete.visibility = View.GONE
+                }
                 TaskDetailViewModel.Mode.ERROR_VALIDATION -> {
                     Toast.makeText(context, "Please input title.", Toast.LENGTH_SHORT).show()
                 }
@@ -57,27 +73,19 @@ class TaskDetailFragment : Fragment() {
                     // go back to the Task List Fragment
                     findNavController().popBackStack()
                 }
+                TaskDetailViewModel.Mode.SUCCESS_DELETE -> {
+                    hideKeyBoard()
+                    // show Toast
+                    Toast.makeText(context, "The task is deleted successfully.", Toast.LENGTH_SHORT)
+                        .show()
+                    // go back to the Task List Fragment
+                    findNavController().popBackStack()
+                }
                 else -> {
                     // TODO: implement other modes here
                 }
             }
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
-        binding = FragmentTaskDetailBinding.inflate(inflater, container, false)
-        // bind viewModel and view
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = viewModel
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         // Passed by Task List by tapping each Task
         val taskId = navigationArgs.taskId
         // Bind the Task to View whether it is new or existing.

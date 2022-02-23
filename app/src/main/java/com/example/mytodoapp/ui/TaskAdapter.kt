@@ -20,7 +20,7 @@ class TaskAdapter(private val onItemClicked: (Task) -> Unit) :
             binding.apply {
                 task?.let {
                     taskIsDone.isChecked = it.isDone
-                    taskTitle.text = it.title
+                    etTitle.text = it.title
                 }
             }
         }

@@ -7,18 +7,20 @@ import androidx.lifecycle.viewModelScope
 import com.example.mytodoapp.ToDoApplication
 import com.example.mytodoapp.data.Task
 import com.example.mytodoapp.data.TaskDao
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class TaskDetailViewModel : ViewModel() {
 
+    /**
+     * Modes of TaskDetail
+     */
     enum class Mode {
         DEFAULT,
         CREATE,
         UPDATE,
         SUCCESS_CREATE,
         SUCCESS_UPDATE,
+        SUCCESS_DELETE,
         ERROR_VALIDATION
     }
 
@@ -76,6 +78,20 @@ class TaskDetailViewModel : ViewModel() {
         _mode.value = Mode.DEFAULT
     }
 
+    // Delete the existing Task on the Detail screen
+    fun deleteCurrentTask() {
+        // Only in the existing Task is retrieved and mode UPDATE
+        if (taskId != 0 && _mode.value == Mode.UPDATE) {
+            viewModelScope.launch {
+                val task = taskDao.findById(taskId)
+                taskDao.delete(task)
+            }
+            _mode.value = Mode.SUCCESS_DELETE
+        }
+        // Reset mode
+        _mode.value = Mode.DEFAULT
+    }
+
     // validation check for adding new Task
     private fun isEntryValid(): Boolean {
         return !taskTitle.value.isNullOrEmpty()
@@ -109,14 +125,5 @@ class TaskDetailViewModel : ViewModel() {
     private fun updateTask(task: Task) {
         viewModelScope.launch { taskDao.update(task) }
     }
-
-//    fun deleteTask(task: Task) {
-//        viewModelScope.launch { taskDao.delete(task) }
-//    }
-//
-//    fun doneUndoneTask(task: Task, isDone: Boolean) {
-//        val newTask = task.copy(isDone = isDone)
-//        updateTask(newTask)
-//    }
 
 }
