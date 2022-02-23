@@ -34,7 +34,7 @@ class TaskListFragment : Fragment() {
 
         // Set PagingDataAdapter to the RecyclerView
         val adapter = TaskAdapter {
-            // Tap Task to move to the Detail
+            // Tap Task to move to the Detail passing Task ID
             val action =
                 TaskListFragmentDirections.actionTaskListFragmentToTaskDetailFragment(it.id)
             findNavController().navigate(action)

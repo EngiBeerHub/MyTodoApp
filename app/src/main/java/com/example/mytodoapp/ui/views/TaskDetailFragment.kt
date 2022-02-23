@@ -28,24 +28,38 @@ class TaskDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        /**
+         * Subscribe TaskDetailViewModel's events
+         */
         // When the input validation check is error, Show a Toast.
-        viewModel.isEntryValid.observe(this) {
-            if (it == false) {
-                Toast.makeText(context, "Please input title.", Toast.LENGTH_SHORT).show()
-            }
-        }
-        // When the Task Detail Fragment is done, go back to the Task List Fragment
-        viewModel.isBackToList.observe(this) {
-            if (it == true) {
-                // hide keyboard
-                val manager =
-                    activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                manager.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
-                // show Toast
-                Toast.makeText(context, "Task is registered successfully.", Toast.LENGTH_SHORT)
-                    .show()
-                // go back to the Task List Fragment
-                findNavController().popBackStack()
+        viewModel.mode.observe(this) {
+            when (it) {
+                TaskDetailViewModel.Mode.ERROR_VALIDATION -> {
+                    Toast.makeText(context, "Please input title.", Toast.LENGTH_SHORT).show()
+                }
+                TaskDetailViewModel.Mode.SUCCESS_CREATE -> {
+                    hideKeyBoard()
+                    // show Toast
+                    Toast.makeText(
+                        context,
+                        "The new task is created successfully.",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    // go back to the Task List Fragment
+                    findNavController().popBackStack()
+                }
+                TaskDetailViewModel.Mode.SUCCESS_UPDATE -> {
+                    hideKeyBoard()
+                    // show Toast
+                    Toast.makeText(context, "The task is saved successfully.", Toast.LENGTH_SHORT)
+                        .show()
+                    // go back to the Task List Fragment
+                    findNavController().popBackStack()
+                }
+                else -> {
+                    // TODO: implement other modes here
+                }
             }
         }
     }
@@ -59,14 +73,21 @@ class TaskDetailFragment : Fragment() {
         // bind viewModel and view
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
-        // TODO: set initial data from Room when updating the existing Task
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Passed by Task List by tapping each Task
         val taskId = navigationArgs.taskId
-        // If taskId is passed, bind the Task to View.
+        // Bind the Task to View whether it is new or existing.
         viewModel.bindTask(taskId)
+    }
+
+    private fun hideKeyBoard() {
+        // hide keyboard
+        val manager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
     }
 }

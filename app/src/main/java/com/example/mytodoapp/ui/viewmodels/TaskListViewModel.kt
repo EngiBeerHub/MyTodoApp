@@ -36,7 +36,6 @@ class TaskListViewModel : ViewModel() {
         viewModelScope.launch {
             val rowCount = withContext(Dispatchers.Default) { taskDao.getRowCount() }
             if (rowCount == 0) {
-                // TODO: insert initial Task data
                 taskDao.insertAll(
                     Task(0, true, "Sample Task1", "This is a sample task."),
                     Task(0, false, "Sample Task2", "This is a sample task."),
