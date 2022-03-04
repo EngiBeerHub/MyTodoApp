@@ -52,7 +52,13 @@ class TaskDetailFragment : Fragment() {
                     binding.buttonDelete.visibility = View.GONE
                 }
                 TaskDetailViewModel.Mode.ERROR_VALIDATION -> {
-                    Toast.makeText(context, "Please input title.", Toast.LENGTH_SHORT).show()
+                    // Show Toast
+//                    Toast.makeText(context, "Please input title.", Toast.LENGTH_SHORT).show()
+                    // Show Snack bar
+                    Snackbar.make(
+                        view, "Please input title.",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
                 TaskDetailViewModel.Mode.SUCCESS_CREATE -> {
                     hideKeyBoard()

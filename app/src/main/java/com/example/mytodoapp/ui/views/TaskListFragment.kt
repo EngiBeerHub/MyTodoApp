@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.mytodoapp.databinding.FragmentTaskListBinding
-import com.example.mytodoapp.databinding.TaskRowBinding
 import com.example.mytodoapp.ui.TaskAdapter
 import com.example.mytodoapp.ui.viewmodels.TaskListViewModel
 import kotlinx.coroutines.flow.collectLatest
