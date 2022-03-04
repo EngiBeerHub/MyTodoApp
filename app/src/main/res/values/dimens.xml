@@ -3,4 +3,5 @@
     <dimen name="margin_layout">16dp</dimen>
     <dimen name="margin_between_elements">8dp</dimen>
     <dimen name="text_size_list_title">24sp</dimen>
+    <dimen name="text_size_button">16sp</dimen>
 </resources>

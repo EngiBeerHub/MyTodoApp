@@ -53,22 +53,26 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_save"
+            style="@style/Widget.Material3.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_layout"
             android:onClick="@{() -> viewModel.saveCurrentTask()}"
             android:text="@string/button_save"
+            android:textSize="@dimen/text_size_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/task_content_label" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_delete"
+            style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_layout"
             android:onClick="@{() -> viewModel.deleteCurrentTask()}"
             android:text="@string/button_delete"
+            android:textSize="@dimen/text_size_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_save" />

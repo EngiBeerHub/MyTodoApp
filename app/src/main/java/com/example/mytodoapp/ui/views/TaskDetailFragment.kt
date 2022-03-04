@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.mytodoapp.databinding.FragmentTaskDetailBinding
 import com.example.mytodoapp.ui.viewmodels.TaskDetailViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class TaskDetailFragment : Fragment() {
 
@@ -56,28 +57,46 @@ class TaskDetailFragment : Fragment() {
                 TaskDetailViewModel.Mode.SUCCESS_CREATE -> {
                     hideKeyBoard()
                     // show Toast
-                    Toast.makeText(
-                        context,
+//                    Toast.makeText(
+//                        context,
+//                        "The new task is created successfully.",
+//                        Toast.LENGTH_SHORT
+//                    )
+//                        .show()
+                    // Show Snack bar
+                    Snackbar.make(
+                        view,
                         "The new task is created successfully.",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                     // go back to the Task List Fragment
                     findNavController().popBackStack()
                 }
                 TaskDetailViewModel.Mode.SUCCESS_UPDATE -> {
                     hideKeyBoard()
                     // show Toast
-                    Toast.makeText(context, "The task is saved successfully.", Toast.LENGTH_SHORT)
-                        .show()
+//                    Toast.makeText(context, "The task is saved successfully.", Toast.LENGTH_SHORT)
+//                        .show()
+                    // Show Snack bar
+                    Snackbar.make(
+                        view,
+                        "The new task is created successfully.",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                     // go back to the Task List Fragment
                     findNavController().popBackStack()
                 }
                 TaskDetailViewModel.Mode.SUCCESS_DELETE -> {
                     hideKeyBoard()
                     // show Toast
-                    Toast.makeText(context, "The task is deleted successfully.", Toast.LENGTH_SHORT)
-                        .show()
+//                    Toast.makeText(context, "The task is deleted successfully.", Toast.LENGTH_SHORT)
+//                        .show()
+                    // Show Snack bar
+                    Snackbar.make(
+                        view,
+                        "The new task is created successfully.",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                     // go back to the Task List Fragment
                     findNavController().popBackStack()
                 }
