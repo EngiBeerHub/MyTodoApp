@@ -5,4 +5,5 @@
     <string name="hint_task_content">Content</string>
     <string name="button_save">Save</string>
     <string name="button_delete">Delete</string>
+    <string name="menu_title_todo_list">Todo List</string>
 </resources>
