@@ -52,7 +52,7 @@ class TaskAdapter(
             binding.apply {
                 if (isChecked) {
                     etTitle.apply {
-                        setTextColor(Color.LTGRAY)
+//                        setTextColor(Color.LTGRAY)
                         paint.apply {
                             flags = Paint.STRIKE_THRU_TEXT_FLAG
                             isAntiAlias = true
@@ -60,7 +60,7 @@ class TaskAdapter(
                     }
                 } else {
                     etTitle.apply {
-                        setTextColor(Color.BLACK)
+//                        setTextColor(Color.BLACK)
                         paint.apply {
                             flags = Paint.ANTI_ALIAS_FLAG
                             isAntiAlias = true

@@ -17,4 +17,14 @@
     <color name="secondaryDarkColor">#5870cb</color>
     <color name="primaryTextColor">#ffffff</color>
     <color name="secondaryTextColor">#000000</color>
+
+    <color name="dark_primaryColor">#424242</color>
+    <color name="dark_primaryLightColor">#6d6d6d</color>
+    <color name="dark_primaryDarkColor">#1b1b1b</color>
+    <color name="dark_secondaryColor">#607d8b</color>
+    <color name="dark_secondaryLightColor">#8eacbb</color>
+    <color name="dark_secondaryDarkColor">#34515e</color>
+    <color name="dark_primaryTextColor">#ffffff</color>
+    <color name="dark_secondaryTextColor">#000000</color>
+    <color name="dark_strokeColor">#ffffff</color>
 </resources>
