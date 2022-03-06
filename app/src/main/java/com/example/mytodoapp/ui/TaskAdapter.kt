@@ -1,6 +1,5 @@
 package com.example.mytodoapp.ui
 
-import android.graphics.Color
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -52,7 +51,6 @@ class TaskAdapter(
             binding.apply {
                 if (isChecked) {
                     etTitle.apply {
-//                        setTextColor(Color.LTGRAY)
                         paint.apply {
                             flags = Paint.STRIKE_THRU_TEXT_FLAG
                             isAntiAlias = true
@@ -60,7 +58,6 @@ class TaskAdapter(
                     }
                 } else {
                     etTitle.apply {
-//                        setTextColor(Color.BLACK)
                         paint.apply {
                             flags = Paint.ANTI_ALIAS_FLAG
                             isAntiAlias = true
