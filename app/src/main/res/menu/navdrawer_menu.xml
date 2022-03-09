@@ -6,6 +6,6 @@
         android:title="@string/menu_title_list" />
     <item
         android:id="@+id/taskDetailFragment"
-        android:icon="@drawable/ic_baseline_add_task_24"
-        android:title="@string/menu_title_detail" />
+        android:icon="@drawable/ic_baseline_add_24"
+        android:title="@string/menu_title_add_task" />
 </menu>
