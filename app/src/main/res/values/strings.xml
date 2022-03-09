@@ -7,4 +7,12 @@
     <string name="button_delete">Delete</string>
     <string name="menu_title_list">Todo List</string>
     <string name="menu_title_add_task">Add task</string>
+    <string name="menu_title_settings">Settings</string>
+    <!-- Preference Titles -->
+    <string name="general_header">General</string>
+
+    <!-- Theme Preferences -->
+    <string name="theme_title">App Theme</string>
+    <string name="preference_key_theme">theme</string>
+
 </resources>
