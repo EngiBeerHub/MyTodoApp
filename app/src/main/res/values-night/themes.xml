@@ -14,6 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <!--  OutlinedButton theme  -->
     <style name="OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
         <item name="strokeColor">@color/dark_strokeColor</item>
         <item name="android:textColor">@color/dark_primaryTextColor</item>

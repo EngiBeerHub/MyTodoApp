@@ -6,7 +6,6 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.example.mytodoapp.R
-import kotlin.ClassCastException
 
 /**
  * A Dialog to confirm deleting a task to the user.
@@ -39,7 +38,7 @@ class DeleteTaskDialogFragment : DialogFragment() {
         // Verify that the host fragment implements the callback interface
         try {
             // Instantiate the DeleteTaskDialogListener so we can send events to the host
-        listener = parentFragment as DeleteTaskDialogListener
+            listener = parentFragment as DeleteTaskDialogListener
         } catch (e: ClassCastException) {
             // The fragment doesn't implement the interface, throw exception
             throw ClassCastException(("$context must implement DeleteTaskDialogListener"))
