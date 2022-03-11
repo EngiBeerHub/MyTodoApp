@@ -51,17 +51,20 @@ class MainActivity : AppCompatActivity() {
             .setupWithNavController(navController)
     }
 
+    // Up button handing for navigation drawer
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
 
+    // Inflate actionbar's menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.ationbar_menu, menu)
         return true
     }
 
+    // Handle selecting item in the action bar
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)

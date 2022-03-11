@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,7 +15,7 @@ import com.example.mytodoapp.databinding.FragmentTaskDetailBinding
 import com.example.mytodoapp.ui.viewmodels.TaskDetailViewModel
 import com.google.android.material.snackbar.Snackbar
 
-class TaskDetailFragment : Fragment() {
+class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialogListener {
 
     // Binding object instance corresponding to the fragment_task_list.xml
     private lateinit var binding: FragmentTaskDetailBinding
@@ -43,7 +44,6 @@ class TaskDetailFragment : Fragment() {
          * Subscribe TaskDetailViewModel's events
          * and handle changing View
          */
-        // When the input validation check is error, Show a Toast.
         viewModel.mode.observe(viewLifecycleOwner) { mode ->
             when (mode) {
                 TaskDetailViewModel.Mode.CREATE -> {
@@ -91,6 +91,9 @@ class TaskDetailFragment : Fragment() {
                     // go back to the Task List Fragment
                     findNavController().popBackStack()
                 }
+                TaskDetailViewModel.Mode.CONFIRM_DELETE -> {
+                    showDeleteDialog()
+                }
                 TaskDetailViewModel.Mode.SUCCESS_DELETE -> {
                     hideKeyBoard()
                     // show Toast
@@ -121,5 +124,22 @@ class TaskDetailFragment : Fragment() {
         val manager =
             activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         manager.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
+    }
+
+    /**
+     * Methods handling DeleteTaskDialog
+     */
+    private fun showDeleteDialog() {
+        val deleteDialog = DeleteTaskDialogFragment()
+        // Add DeleteDialogFragment as a child fragment
+        deleteDialog.show(childFragmentManager, "DeleteDialogFragment")
+    }
+
+    override fun onDialogPositiveClick(dialog: DialogFragment) {
+        viewModel.deleteCurrentTask()
+    }
+
+    override fun onDialogNegativeClick(dialog: DialogFragment) {
+        dialog.dismiss()
     }
 }

@@ -20,6 +20,7 @@ class TaskDetailViewModel : ViewModel() {
         UPDATE,
         SUCCESS_CREATE,
         SUCCESS_UPDATE,
+        CONFIRM_DELETE,
         SUCCESS_DELETE,
         ERROR_VALIDATION
     }
@@ -78,10 +79,14 @@ class TaskDetailViewModel : ViewModel() {
         _mode.value = Mode.DEFAULT
     }
 
+    fun confirmDeletingTask() {
+        _mode.value = Mode.CONFIRM_DELETE
+    }
+
     // Delete the existing Task on the Detail screen
     fun deleteCurrentTask() {
         // Only in the existing Task is retrieved and mode UPDATE
-        if (taskId != 0 && _mode.value == Mode.UPDATE) {
+        if (taskId != 0 && _mode.value == Mode.CONFIRM_DELETE) {
             viewModelScope.launch {
                 val task = taskDao.findById(taskId)
                 taskDao.delete(task)
