@@ -36,16 +36,13 @@ class DeleteTaskDialogFragment : DialogFragment() {
     // For instantiate the DeleteTaskDialogListener
     override fun onAttach(context: Context) {
         super.onAttach(context)
-//        // Verify that the host fragment implements the callback interface
-//        try {
-//            // Instantiate the DeleteTaskDialogListener so we can send events to the host
-//            listener = context as DeleteTaskDialogListener
-//        } catch (e: ClassCastException) {
-//            // The fragment doesn't implement the interface, throw exception
-//            throw ClassCastException(("$context must implement DeleteTaskDialogListener"))
-//        }
-        if (parentFragment is DeleteTaskDialogListener) {
-            listener = parentFragment as DeleteTaskDialogListener
+        // Verify that the host fragment implements the callback interface
+        try {
+            // Instantiate the DeleteTaskDialogListener so we can send events to the host
+        listener = parentFragment as DeleteTaskDialogListener
+        } catch (e: ClassCastException) {
+            // The fragment doesn't implement the interface, throw exception
+            throw ClassCastException(("$context must implement DeleteTaskDialogListener"))
         }
     }
 

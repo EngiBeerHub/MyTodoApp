@@ -51,8 +51,6 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                     binding.buttonDelete.visibility = View.GONE
                 }
                 TaskDetailViewModel.Mode.ERROR_VALIDATION -> {
-                    // Show Toast
-//                    Toast.makeText(context, "Please input title.", Toast.LENGTH_SHORT).show()
                     // Show Snack bar
                     Snackbar.make(
                         view, "Please input title.",
@@ -61,13 +59,6 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                 }
                 TaskDetailViewModel.Mode.SUCCESS_CREATE -> {
                     hideKeyBoard()
-                    // show Toast
-//                    Toast.makeText(
-//                        context,
-//                        "The new task is created successfully.",
-//                        Toast.LENGTH_SHORT
-//                    )
-//                        .show()
                     // Show Snack bar
                     Snackbar.make(
                         view,
@@ -79,9 +70,6 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                 }
                 TaskDetailViewModel.Mode.SUCCESS_UPDATE -> {
                     hideKeyBoard()
-                    // show Toast
-//                    Toast.makeText(context, "The task is saved successfully.", Toast.LENGTH_SHORT)
-//                        .show()
                     // Show Snack bar
                     Snackbar.make(
                         view,
@@ -96,9 +84,6 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                 }
                 TaskDetailViewModel.Mode.SUCCESS_DELETE -> {
                     hideKeyBoard()
-                    // show Toast
-//                    Toast.makeText(context, "The task is deleted successfully.", Toast.LENGTH_SHORT)
-//                        .show()
                     // Show Snack bar
                     Snackbar.make(
                         view,
@@ -109,7 +94,6 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                     findNavController().popBackStack()
                 }
                 else -> {
-                    // TODO: implement other modes here
                 }
             }
         }
