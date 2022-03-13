@@ -30,6 +30,12 @@ class TaskListFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentTaskListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         // Set PagingDataAdapter to the RecyclerView
         val adapter = TaskAdapter(viewModel) {
             // Tap Task to move to the Detail passing Task ID
@@ -43,12 +49,6 @@ class TaskListFragment : Fragment() {
             }
         }
         binding.recyclerView.adapter = adapter
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         // Tap FAB to move to Task Detail Fragment
         binding.floatingActionButton.setOnClickListener {
