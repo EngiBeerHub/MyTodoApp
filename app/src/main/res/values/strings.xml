@@ -18,5 +18,8 @@
     <string name="dialog_delete_message">Are you sure want to delete this task?</string>
     <string name="dialog_delete_label_positive">Delete</string>
     <string name="dialog_delete_label_negative">Cancel</string>
+    <string name="notification_channel_id">NOTIFICATION_CHANNEL_ID</string>
+    <string name="notification_channel_name">NOTIFICATION_CHANNEL_NAME</string>
+    <string name="notification_channel_description">This is notification channel of Todo App.</string>
 
 </resources>

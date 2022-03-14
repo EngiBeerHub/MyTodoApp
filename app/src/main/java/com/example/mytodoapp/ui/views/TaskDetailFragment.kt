@@ -1,9 +1,8 @@
 package com.example.mytodoapp.ui.views
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
-import android.os.Build
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -109,32 +108,27 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
         viewModel.bindTask(taskId)
 
         // TODO: Implement Notification sample
-        createNotificationChannel()
-        val builder = NotificationCompat.Builder(requireContext(), "CHANNEL_ID")
+        val builder = NotificationCompat.Builder(
+            requireContext(),
+            getString(R.string.notification_channel_id)
+        )
+
+        val intent = Intent(requireContext(), MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(requireContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
         val notification = builder.apply {
             setSmallIcon(R.drawable.ic_baseline_check_circle_outline_24)
             setContentTitle("Todo App")
             setContentText("This is a sample notification.")
             priority = NotificationCompat.PRIORITY_DEFAULT
+            setContentIntent(pendingIntent)
+            setAutoCancel(true)
         }.build()
         with(NotificationManagerCompat.from(requireContext())) {
             notify(1, notification)
-        }
-    }
-
-    private fun createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "CHANNEL_NAME"
-            val descriptionText = "CHANNEL_DESCRIPTION"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel("CHANNEL_ID", name, importance)
-            channel.description = descriptionText
-            // Register the channel with the system
-            val notificationManager: NotificationManager =
-                requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
         }
     }
 
