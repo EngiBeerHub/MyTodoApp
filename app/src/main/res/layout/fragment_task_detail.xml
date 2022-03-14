@@ -67,6 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:onClick="@{() -> viewModel.setDeadline()}"
                 android:text="@string/button_pick_date"
                 android:textSize="@dimen/text_size_button" />
 
@@ -85,6 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/margin_between_elements"
+                android:text="@={viewModel.taskDeadline}"
                 android:textSize="@dimen/text_size_button"
                 tools:text="2022/03/31 14:00" />
 

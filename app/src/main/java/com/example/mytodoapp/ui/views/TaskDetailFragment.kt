@@ -62,6 +62,9 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                         Snackbar.LENGTH_SHORT
                     ).show()
                 }
+                TaskDetailViewModel.Mode.UPDATE_DEADLINE -> {
+                    showDatePickerDialog()
+                }
                 TaskDetailViewModel.Mode.SUCCESS_CREATE -> {
                     hideKeyBoard()
                     // Show Snack bar
@@ -137,6 +140,12 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
         val manager =
             activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         manager.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
+    }
+
+    private fun showDatePickerDialog() {
+        val datePickerDialog = DatePickerDialogFragment()
+        // Add DatePickerDialogFragment as a child fragment
+        datePickerDialog.show(childFragmentManager, "DatePickerDialogFragment")
     }
 
     /**

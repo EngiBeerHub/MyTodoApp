@@ -17,7 +17,8 @@ class TaskDetailViewModel : ViewModel() {
     enum class Mode {
         DEFAULT,
         CREATE,
-        UPDATE,
+        UPDATE_COMMON,
+        UPDATE_DEADLINE,
         SUCCESS_CREATE,
         SUCCESS_UPDATE,
         CONFIRM_DELETE,
@@ -33,6 +34,7 @@ class TaskDetailViewModel : ViewModel() {
     private var taskId: Int = 0
     val taskTitle: MutableLiveData<String> = MutableLiveData()
     val taskContent: MutableLiveData<String> = MutableLiveData()
+    val taskDeadline: MutableLiveData<String> = MutableLiveData()
 
     // initialize values for view state
     init {
@@ -49,14 +51,19 @@ class TaskDetailViewModel : ViewModel() {
             _mode.value = Mode.CREATE
         } else {
             // Else, bind the existing Task to the view
-            _mode.value = Mode.UPDATE
+            _mode.value = Mode.UPDATE_COMMON
             this.taskId = taskId
             viewModelScope.launch {
                 val task = withContext(Dispatchers.Default) {
                     taskDao.findById(taskId)
                 }
                 taskTitle.value = task.title
-                taskContent.value = task.content
+                task.content?.let {
+                    taskContent.value = task.content
+                }
+                task.deadLine?.let {
+                    taskDeadline.value = task.deadLine.toString()
+                }
             }
         }
     }
@@ -68,7 +75,7 @@ class TaskDetailViewModel : ViewModel() {
             if (_mode.value == Mode.CREATE) {
                 createNewTask()
                 _mode.value = Mode.SUCCESS_CREATE
-            } else if (_mode.value == Mode.UPDATE) {
+            } else if (_mode.value == Mode.UPDATE_COMMON) {
                 updateExistingTask()
                 _mode.value = Mode.SUCCESS_UPDATE
             }
@@ -79,13 +86,18 @@ class TaskDetailViewModel : ViewModel() {
         _mode.value = Mode.DEFAULT
     }
 
+    fun setDeadline() {
+        _mode.value = Mode.UPDATE_DEADLINE
+    }
+
+    // Confirm before deleting
     fun confirmDeletingTask() {
         _mode.value = Mode.CONFIRM_DELETE
     }
 
     // Delete the existing Task on the Detail screen
     fun deleteCurrentTask() {
-        // Only in the existing Task is retrieved and mode UPDATE
+        // Only in the existing Task is retrieved and mode UPDATE_COMMON
         if (taskId != 0 && _mode.value == Mode.CONFIRM_DELETE) {
             viewModelScope.launch {
                 val task = taskDao.findById(taskId)
