@@ -33,7 +33,7 @@ class TaskListViewModel : ViewModel() {
 
     // Make the Task done or undone.
     fun doneUndoneTask(task: Task, isDone: Boolean) {
-        val updatedTask = Task(task.id, isDone, task.title, task.content)
+        val updatedTask = Task(task.id, isDone, task.title, task.content, null)
         viewModelScope.launch {
             taskDao.update(updatedTask)
         }
@@ -45,36 +45,36 @@ class TaskListViewModel : ViewModel() {
             val rowCount = withContext(Dispatchers.Default) { taskDao.getRowCount() }
             if (rowCount == 0) {
                 taskDao.insertAll(
-                    Task(0, true, "Sample Task1", "This is a sample task."),
-                    Task(0, false, "Sample Task2", "This is a sample task."),
-                    Task(0, true, "Sample Task3", "This is a sample task."),
-                    Task(0, false, "Sample Task4", "This is a sample task."),
-                    Task(0, true, "Sample Task5", "This is a sample task."),
-                    Task(0, false, "Sample Task6", "This is a sample task."),
-                    Task(0, true, "Sample Task7", "This is a sample task."),
-                    Task(0, false, "Sample Task8", "This is a sample task."),
-                    Task(0, true, "Sample Task9", "This is a sample task."),
-                    Task(0, false, "Sample Task10", "This is a sample task."),
-                    Task(0, true, "Sample Task1", "This is a sample task."),
-                    Task(0, false, "Sample Task2", "This is a sample task."),
-                    Task(0, true, "Sample Task3", "This is a sample task."),
-                    Task(0, false, "Sample Task4", "This is a sample task."),
-                    Task(0, true, "Sample Task5", "This is a sample task."),
-                    Task(0, false, "Sample Task6", "This is a sample task."),
-                    Task(0, true, "Sample Task7", "This is a sample task."),
-                    Task(0, false, "Sample Task8", "This is a sample task."),
-                    Task(0, true, "Sample Task9", "This is a sample task."),
-                    Task(0, false, "Sample Task10", "This is a sample task."),
-                    Task(0, true, "Sample Task1", "This is a sample task."),
-                    Task(0, false, "Sample Task2", "This is a sample task."),
-                    Task(0, true, "Sample Task3", "This is a sample task."),
-                    Task(0, false, "Sample Task4", "This is a sample task."),
-                    Task(0, true, "Sample Task5", "This is a sample task."),
-                    Task(0, false, "Sample Task6", "This is a sample task."),
-                    Task(0, true, "Sample Task7", "This is a sample task."),
-                    Task(0, false, "Sample Task8", "This is a sample task."),
-                    Task(0, true, "Sample Task9", "This is a sample task."),
-                    Task(0, false, "Sample Task10", "This is a sample task.")
+                    Task(0, true, "Sample Task1", "This is a sample task.", null),
+                    Task(0, false, "Sample Task2", "This is a sample task.", null),
+                    Task(0, true, "Sample Task3", "This is a sample task.", null),
+                    Task(0, false, "Sample Task4", "This is a sample task.", null),
+                    Task(0, true, "Sample Task5", "This is a sample task.", null),
+                    Task(0, false, "Sample Task6", "This is a sample task.", null),
+                    Task(0, true, "Sample Task7", "This is a sample task.", null),
+                    Task(0, false, "Sample Task8", "This is a sample task.", null),
+                    Task(0, true, "Sample Task9", "This is a sample task.", null),
+                    Task(0, false, "Sample Task10", "This is a sample task.", null),
+                    Task(0, true, "Sample Task1", "This is a sample task.", null),
+                    Task(0, false, "Sample Task2", "This is a sample task.", null),
+                    Task(0, true, "Sample Task3", "This is a sample task.", null),
+                    Task(0, false, "Sample Task4", "This is a sample task.", null),
+                    Task(0, true, "Sample Task5", "This is a sample task.", null),
+                    Task(0, false, "Sample Task6", "This is a sample task.", null),
+                    Task(0, true, "Sample Task7", "This is a sample task.", null),
+                    Task(0, false, "Sample Task8", "This is a sample task.", null),
+                    Task(0, true, "Sample Task9", "This is a sample task.", null),
+                    Task(0, false, "Sample Task10", "This is a sample task.", null),
+                    Task(0, true, "Sample Task1", "This is a sample task.", null),
+                    Task(0, false, "Sample Task2", "This is a sample task.", null),
+                    Task(0, true, "Sample Task3", "This is a sample task.", null),
+                    Task(0, false, "Sample Task4", "This is a sample task.", null),
+                    Task(0, true, "Sample Task5", "This is a sample task.", null),
+                    Task(0, false, "Sample Task6", "This is a sample task.", null),
+                    Task(0, true, "Sample Task7", "This is a sample task.", null),
+                    Task(0, false, "Sample Task8", "This is a sample task.", null),
+                    Task(0, true, "Sample Task9", "This is a sample task.", null),
+                    Task(0, false, "Sample Task10", "This is a sample task.", null)
                 )
             }
         }

@@ -106,9 +106,9 @@ class TaskDetailViewModel : ViewModel() {
     private fun createNewTask() {
         // check whether content is inputted
         val newTask = if (taskContent.value != null) {
-            Task(title = taskTitle.value!!, content = taskContent.value!!)
+            Task(title = taskTitle.value!!, content = taskContent.value, deadLine = null)
         } else {
-            Task(title = taskTitle.value!!)
+            Task(title = taskTitle.value!!, content = null, deadLine = null)
         }
         insertTask(newTask)
     }
@@ -116,9 +116,14 @@ class TaskDetailViewModel : ViewModel() {
     // Update the current existingTask on the Detail Screen
     private fun updateExistingTask() {
         val updatedTask = if (taskContent.value != null) {
-            Task(id = taskId, title = taskTitle.value!!, content = taskContent.value!!)
+            Task(
+                id = taskId,
+                title = taskTitle.value!!,
+                content = taskContent.value!!,
+                deadLine = null
+            )
         } else {
-            Task(id = taskId, title = taskTitle.value!!)
+            Task(id = taskId, title = taskTitle.value!!, content = null, deadLine = null)
         }
         updateTask(updatedTask)
     }
