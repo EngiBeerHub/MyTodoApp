@@ -21,5 +21,7 @@
     <string name="notification_channel_id">NOTIFICATION_CHANNEL_ID</string>
     <string name="notification_channel_name">NOTIFICATION_CHANNEL_NAME</string>
     <string name="notification_channel_description">This is notification channel of Todo App.</string>
+    <string name="task_deadline_label">Deadline:</string>
+    <string name="button_pick_date">Pick</string>
 
 </resources>

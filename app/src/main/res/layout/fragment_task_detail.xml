@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -51,6 +52,44 @@
                 android:text="@={viewModel.taskContent}" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <LinearLayout
+            android:id="@+id/rv_deadline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_layout"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/task_content_label">
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Material3.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/button_pick_date"
+                android:textSize="@dimen/text_size_button" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/task_deadline_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/margin_between_elements"
+                android:text="@string/task_deadline_label"
+                android:textSize="@dimen/text_size_button" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/task_deadline_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/margin_between_elements"
+                android:textSize="@dimen/text_size_button"
+                tools:text="2022/03/31 14:00" />
+
+        </LinearLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_save"
             style="@style/Widget.Material3.Button"
@@ -62,7 +101,7 @@
             android:textSize="@dimen/text_size_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/task_content_label" />
+            app:layout_constraintTop_toBottomOf="@+id/rv_deadline" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_delete"
