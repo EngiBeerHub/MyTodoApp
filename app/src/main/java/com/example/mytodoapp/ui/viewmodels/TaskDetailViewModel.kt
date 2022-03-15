@@ -1,45 +1,30 @@
 package com.example.mytodoapp.ui.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mytodoapp.ToDoApplication
 import com.example.mytodoapp.data.Task
 import com.example.mytodoapp.data.TaskDao
-import kotlinx.coroutines.*
+import com.example.mytodoapp.ui.views.Mode
+import com.example.mytodoapp.ui.views.TaskDetailUiState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TaskDetailViewModel : ViewModel() {
 
-    /**
-     * Modes of TaskDetail
-     */
-    enum class Mode {
-        DEFAULT,
-        CREATE,
-        UPDATE_COMMON,
-        UPDATE_DEADLINE,
-        SUCCESS_CREATE,
-        SUCCESS_UPDATE,
-        CONFIRM_DELETE,
-        SUCCESS_DELETE,
-        ERROR_VALIDATION
-    }
-
     // Values for View state
-    private val _mode: MutableLiveData<Mode> = MutableLiveData()
-    val mode: LiveData<Mode> = _mode
+    private val _uiState = MutableStateFlow(TaskDetailUiState(Mode.DEFAULT))
+    val uiState = _uiState.asStateFlow()
 
     // Values for Task data
     private var taskId: Int = 0
     val taskTitle: MutableLiveData<String> = MutableLiveData()
     val taskContent: MutableLiveData<String> = MutableLiveData()
     val taskDeadline: MutableLiveData<String> = MutableLiveData()
-
-    // initialize values for view state
-    init {
-        _mode.value = Mode.DEFAULT
-    }
 
     // DAO to handle Task table
     private val taskDao: TaskDao = ToDoApplication.database.taskDao()
@@ -48,10 +33,14 @@ class TaskDetailViewModel : ViewModel() {
     fun bindTask(taskId: Int) {
         // If taskId is default value, this is a new Task
         if (taskId == 0) {
-            _mode.value = Mode.CREATE
+            viewModelScope.launch {
+                _uiState.value = _uiState.value.copy(mode = Mode.CREATE)
+            }
         } else {
             // Else, bind the existing Task to the view
-            _mode.value = Mode.UPDATE_COMMON
+            viewModelScope.launch {
+                _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_COMMON)
+            }
             this.taskId = taskId
             viewModelScope.launch {
                 val task = withContext(Dispatchers.Default) {
@@ -72,41 +61,41 @@ class TaskDetailViewModel : ViewModel() {
     fun saveCurrentTask() {
         // If validation is OK, create or update the current Task on the Detail screen.
         if (isEntryValid()) {
-            if (_mode.value == Mode.CREATE) {
+            if (_uiState.value.mode == Mode.CREATE) {
                 createNewTask()
-                _mode.value = Mode.SUCCESS_CREATE
-            } else if (_mode.value == Mode.UPDATE_COMMON) {
+                _uiState.value = _uiState.value.copy(mode = Mode.SUCCESS_CREATE)
+            } else if (_uiState.value.mode == Mode.UPDATE_COMMON) {
                 updateExistingTask()
-                _mode.value = Mode.SUCCESS_UPDATE
+                _uiState.value = _uiState.value.copy(mode = Mode.SUCCESS_UPDATE)
             }
         } else {
-            _mode.value = Mode.ERROR_VALIDATION
+            _uiState.value = _uiState.value.copy(mode = Mode.ERROR_VALIDATION)
         }
         // Reset mode
-        _mode.value = Mode.DEFAULT
+        _uiState.value = _uiState.value.copy(mode = Mode.DEFAULT)
     }
 
     fun setDeadline() {
-        _mode.value = Mode.UPDATE_DEADLINE
+        _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_DEADLINE)
     }
 
     // Confirm before deleting
     fun confirmDeletingTask() {
-        _mode.value = Mode.CONFIRM_DELETE
+        _uiState.value = _uiState.value.copy(mode = Mode.CONFIRM_DELETE)
     }
 
     // Delete the existing Task on the Detail screen
     fun deleteCurrentTask() {
         // Only in the existing Task is retrieved and mode UPDATE_COMMON
-        if (taskId != 0 && _mode.value == Mode.CONFIRM_DELETE) {
+        if (taskId != 0 && _uiState.value.mode == Mode.CONFIRM_DELETE) {
             viewModelScope.launch {
                 val task = taskDao.findById(taskId)
                 taskDao.delete(task)
             }
-            _mode.value = Mode.SUCCESS_DELETE
+            _uiState.value = _uiState.value.copy(mode = Mode.SUCCESS_DELETE)
         }
         // Reset mode
-        _mode.value = Mode.DEFAULT
+        _uiState.value = _uiState.value.copy(mode = Mode.DEFAULT)
     }
 
     // validation check for adding new Task

@@ -13,12 +13,17 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.mytodoapp.R
 import com.example.mytodoapp.databinding.FragmentTaskDetailBinding
 import com.example.mytodoapp.ui.viewmodels.TaskDetailViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialogListener {
 
@@ -49,59 +54,64 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
          * Subscribe TaskDetailViewModel's events
          * and handle changing View
          */
-        viewModel.mode.observe(viewLifecycleOwner) { mode ->
-            when (mode) {
-                TaskDetailViewModel.Mode.CREATE -> {
-                    // Hide the delete button when CREATE mode.
-                    binding.buttonDelete.visibility = View.GONE
-                }
-                TaskDetailViewModel.Mode.ERROR_VALIDATION -> {
-                    // Show Snack bar
-                    Snackbar.make(
-                        view, "Please input title.",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-                TaskDetailViewModel.Mode.UPDATE_DEADLINE -> {
-                    showDatePickerDialog()
-                }
-                TaskDetailViewModel.Mode.SUCCESS_CREATE -> {
-                    hideKeyBoard()
-                    // Show Snack bar
-                    Snackbar.make(
-                        view,
-                        "The new task is created successfully.",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                    // go back to the Task List Fragment
-                    findNavController().popBackStack()
-                }
-                TaskDetailViewModel.Mode.SUCCESS_UPDATE -> {
-                    hideKeyBoard()
-                    // Show Snack bar
-                    Snackbar.make(
-                        view,
-                        "The new task is created successfully.",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                    // go back to the Task List Fragment
-                    findNavController().popBackStack()
-                }
-                TaskDetailViewModel.Mode.CONFIRM_DELETE -> {
-                    showDeleteDialog()
-                }
-                TaskDetailViewModel.Mode.SUCCESS_DELETE -> {
-                    hideKeyBoard()
-                    // Show Snack bar
-                    Snackbar.make(
-                        view,
-                        "The new task is created successfully.",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                    // go back to the Task List Fragment
-                    findNavController().popBackStack()
-                }
-                else -> {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect {
+                    when (it.mode) {
+                        Mode.CREATE -> {
+                            // Hide the delete button when CREATE mode.
+                            binding.buttonDelete.visibility = View.GONE
+                        }
+                        Mode.ERROR_VALIDATION -> {
+                            // Show Snack bar
+                            Snackbar.make(
+                                view, "Please input title.",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                        }
+                        Mode.UPDATE_DEADLINE -> {
+                            showDatePickerDialog()
+                        }
+                        Mode.SUCCESS_CREATE -> {
+                            hideKeyBoard()
+                            // Show Snack bar
+                            Snackbar.make(
+                                view,
+                                "The new task is created successfully.",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                            // go back to the Task List Fragment
+                            findNavController().popBackStack()
+                        }
+                        Mode.SUCCESS_UPDATE -> {
+                            hideKeyBoard()
+                            // Show Snack bar
+                            Snackbar.make(
+                                view,
+                                "The new task is created successfully.",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                            // go back to the Task List Fragment
+                            findNavController().popBackStack()
+                        }
+                        Mode.CONFIRM_DELETE -> {
+                            showDeleteDialog()
+                        }
+                        Mode.SUCCESS_DELETE -> {
+                            hideKeyBoard()
+                            // Show Snack bar
+                            Snackbar.make(
+                                view,
+                                "The new task is created successfully.",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                            // go back to the Task List Fragment
+                            findNavController().popBackStack()
+                        }
+                        else -> {
+
+                        }
+                    }
                 }
             }
         }
@@ -120,7 +130,12 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent: PendingIntent =
-            PendingIntent.getActivity(requireContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getActivity(
+                requireContext(),
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
 
         val notification = builder.apply {
             setSmallIcon(R.drawable.ic_baseline_check_circle_outline_24)
