@@ -1,7 +1,8 @@
 package com.example.mytodoapp.ui.views
 
 data class TaskDetailUiState(
-    val mode: Mode
+    val mode: Mode,
+    val btDeleteVisible: Boolean
 )
 
 enum class Mode {

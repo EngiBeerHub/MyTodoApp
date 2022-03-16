@@ -58,10 +58,6 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     when (it.mode) {
-                        Mode.CREATE -> {
-                            // Hide the delete button when CREATE mode.
-                            binding.buttonDelete.visibility = View.GONE
-                        }
                         Mode.ERROR_VALIDATION -> {
                             // Show Snack bar
                             Snackbar.make(

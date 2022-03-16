@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
 class TaskDetailViewModel : ViewModel() {
 
     // Values for View state
-    private val _uiState = MutableStateFlow(TaskDetailUiState(Mode.DEFAULT))
+    private val _uiState = MutableStateFlow(TaskDetailUiState(Mode.DEFAULT, true))
     val uiState = _uiState.asStateFlow()
 
     // Values for Task data
@@ -33,7 +33,7 @@ class TaskDetailViewModel : ViewModel() {
     fun bindTask(taskId: Int) {
         // If taskId is default value, this is a new Task
         if (taskId == 0) {
-            _uiState.value = _uiState.value.copy(mode = Mode.CREATE)
+            _uiState.value = _uiState.value.copy(mode = Mode.CREATE, btDeleteVisible = false)
         } else {
             // Else, bind the existing Task to the view
             this.taskId = taskId

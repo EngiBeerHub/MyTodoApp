@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.example.mytodoapp.ui.viewmodels.TaskDetailViewModel" />
@@ -114,6 +116,7 @@
             android:onClick="@{() -> viewModel.confirmDeletingTask()}"
             android:text="@string/button_delete"
             android:textSize="@dimen/text_size_button"
+            android:visibility="@{viewModel.uiState.btDeleteVisible ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_save" />
