@@ -65,9 +65,10 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                         Mode.ERROR_VALIDATION -> {
                             // Show Snack bar
                             Snackbar.make(
-                                view, "Please input title.",
+                                view, getString(R.string.snackbar_message_error_validation),
                                 Snackbar.LENGTH_SHORT
                             ).show()
+                            viewModel.onCompleteEvent()
                         }
                         Mode.UPDATE_DEADLINE -> {
                             showDatePickerDialog()
@@ -77,22 +78,24 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                             // Show Snack bar
                             Snackbar.make(
                                 view,
-                                "The new task is created successfully.",
+                                getString(R.string.snackbar_message_success_create),
                                 Snackbar.LENGTH_SHORT
                             ).show()
                             // go back to the Task List Fragment
                             findNavController().popBackStack()
+                            viewModel.onCompleteEvent()
                         }
                         Mode.SUCCESS_UPDATE -> {
                             hideKeyBoard()
                             // Show Snack bar
                             Snackbar.make(
                                 view,
-                                "The new task is created successfully.",
+                                getString(R.string.snackbar_message_success_update),
                                 Snackbar.LENGTH_SHORT
                             ).show()
                             // go back to the Task List Fragment
                             findNavController().popBackStack()
+                            viewModel.onCompleteEvent()
                         }
                         Mode.CONFIRM_DELETE -> {
                             showDeleteDialog()
@@ -102,11 +105,12 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                             // Show Snack bar
                             Snackbar.make(
                                 view,
-                                "The new task is created successfully.",
+                                getString(R.string.snackbar_message_success_delete),
                                 Snackbar.LENGTH_SHORT
                             ).show()
                             // go back to the Task List Fragment
                             findNavController().popBackStack()
+                            viewModel.onCompleteEvent()
                         }
                         else -> {
 
@@ -174,9 +178,11 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
 
     override fun onDialogPositiveClick(dialog: DialogFragment) {
         viewModel.deleteCurrentTask()
+        viewModel.onCompleteEvent()
     }
 
     override fun onDialogNegativeClick(dialog: DialogFragment) {
         dialog.dismiss()
+        viewModel.onCompleteEvent()
     }
 }

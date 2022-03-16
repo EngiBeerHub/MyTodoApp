@@ -5,15 +5,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.example.mytodoapp.ToDoApplication
-import com.example.mytodoapp.data.Converters
 import com.example.mytodoapp.data.Task
 import com.example.mytodoapp.data.TaskDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
 

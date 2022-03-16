@@ -33,14 +33,9 @@ class TaskDetailViewModel : ViewModel() {
     fun bindTask(taskId: Int) {
         // If taskId is default value, this is a new Task
         if (taskId == 0) {
-            viewModelScope.launch {
-                _uiState.value = _uiState.value.copy(mode = Mode.CREATE)
-            }
+            _uiState.value = _uiState.value.copy(mode = Mode.CREATE)
         } else {
             // Else, bind the existing Task to the view
-            viewModelScope.launch {
-                _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_COMMON)
-            }
             this.taskId = taskId
             viewModelScope.launch {
                 val task = withContext(Dispatchers.Default) {
@@ -51,9 +46,10 @@ class TaskDetailViewModel : ViewModel() {
                     taskContent.value = task.content
                 }
                 task.deadLine?.let {
-                    taskDeadline.value = task.deadLine.toString()
+                    taskDeadline.value = it.toString()
                 }
             }
+            _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_COMMON)
         }
     }
 
@@ -71,7 +67,10 @@ class TaskDetailViewModel : ViewModel() {
         } else {
             _uiState.value = _uiState.value.copy(mode = Mode.ERROR_VALIDATION)
         }
-        // Reset mode
+    }
+
+    // Observer of this ViewModel must call this method after handling the ViewModel event like CRUD.
+    fun onCompleteEvent() {
         _uiState.value = _uiState.value.copy(mode = Mode.DEFAULT)
     }
 
@@ -94,8 +93,6 @@ class TaskDetailViewModel : ViewModel() {
             }
             _uiState.value = _uiState.value.copy(mode = Mode.SUCCESS_DELETE)
         }
-        // Reset mode
-        _uiState.value = _uiState.value.copy(mode = Mode.DEFAULT)
     }
 
     // validation check for adding new Task

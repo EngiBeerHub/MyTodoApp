@@ -23,5 +23,9 @@
     <string name="notification_channel_description">This is notification channel of Todo App.</string>
     <string name="task_deadline_label">Deadline:</string>
     <string name="button_pick_date">Pick</string>
+    <string name="snackbar_message_error_validation">Please input title.</string>
+    <string name="snackbar_message_success_create">The new task is created successfully.</string>
+    <string name="snackbar_message_success_update">The new task is updated successfully.</string>
+    <string name="snackbar_message_success_delete">The task is deleted successfully.</string>
 
 </resources>
