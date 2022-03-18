@@ -2,6 +2,7 @@ package com.example.mytodoapp.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 import java.util.*
 
 @Entity
@@ -11,5 +12,5 @@ data class Task(
     val isDone: Boolean = false,
     val title: String,
     val content: String?,
-    val deadLine: Date?
+    val deadLine: String?
 )

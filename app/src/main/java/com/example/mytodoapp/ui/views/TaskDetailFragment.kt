@@ -1,5 +1,6 @@
 package com.example.mytodoapp.ui.views
 
+import android.app.DatePickerDialog
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.DatePicker
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.DialogFragment
@@ -25,7 +27,8 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialogListener {
+class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialogListener,
+    DatePickerDialog.OnDateSetListener {
 
     // Binding object instance corresponding to the fragment_task_list.xml
     private lateinit var binding: FragmentTaskDetailBinding
@@ -64,7 +67,7 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                                 view, getString(R.string.snackbar_message_error_validation),
                                 Snackbar.LENGTH_SHORT
                             ).show()
-                            viewModel.onCompleteEvent()
+                            viewModel.onEventCompleted()
                         }
                         Mode.UPDATE_DEADLINE -> {
                             showDatePickerDialog()
@@ -79,7 +82,7 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                             ).show()
                             // go back to the Task List Fragment
                             findNavController().popBackStack()
-                            viewModel.onCompleteEvent()
+                            viewModel.onEventCompleted()
                         }
                         Mode.SUCCESS_UPDATE -> {
                             hideKeyBoard()
@@ -91,7 +94,7 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                             ).show()
                             // go back to the Task List Fragment
                             findNavController().popBackStack()
-                            viewModel.onCompleteEvent()
+                            viewModel.onEventCompleted()
                         }
                         Mode.CONFIRM_DELETE -> {
                             showDeleteDialog()
@@ -106,7 +109,7 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                             ).show()
                             // go back to the Task List Fragment
                             findNavController().popBackStack()
-                            viewModel.onCompleteEvent()
+                            viewModel.onEventCompleted()
                         }
                         else -> {
 
@@ -172,13 +175,20 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
         deleteDialog.show(childFragmentManager, "DeleteDialogFragment")
     }
 
+    // Called when the positive button clicked in the delete confirm dialog
     override fun onDialogPositiveClick(dialog: DialogFragment) {
         viewModel.deleteCurrentTask()
-        viewModel.onCompleteEvent()
+        viewModel.onEventCompleted()
     }
 
+    // Called when the negative button clicked in the delete confirm dialog
     override fun onDialogNegativeClick(dialog: DialogFragment) {
         dialog.dismiss()
-        viewModel.onCompleteEvent()
+        viewModel.onEventCompleted()
+    }
+
+    // Called when date picker dialog saved
+    override fun onDateSet(datePicker: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        viewModel.onDeadLinePicked(year, month + 1, dayOfMonth)
     }
 }

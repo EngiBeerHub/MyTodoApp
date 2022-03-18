@@ -1,16 +1,20 @@
 package com.example.mytodoapp.data
 
 import androidx.room.TypeConverter
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class Converters {
     @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
+    fun stringToLocalDateTime(value: String?): LocalDateTime? {
+        return value?.let {
+            LocalDateTime.parse(it, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        }
     }
 
     @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time
+    fun localDateTimeToString(value: LocalDateTime?): String? {
+        return value?.toString()
     }
 }

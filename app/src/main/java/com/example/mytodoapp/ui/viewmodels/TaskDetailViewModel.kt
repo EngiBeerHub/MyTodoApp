@@ -1,5 +1,6 @@
 package com.example.mytodoapp.ui.viewmodels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class TaskDetailViewModel : ViewModel() {
 
@@ -70,12 +73,18 @@ class TaskDetailViewModel : ViewModel() {
     }
 
     // Observer of this ViewModel must call this method after handling the ViewModel event like CRUD.
-    fun onCompleteEvent() {
+    fun onEventCompleted() {
         _uiState.value = _uiState.value.copy(mode = Mode.DEFAULT)
     }
 
     fun setDeadline() {
         _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_DEADLINE)
+    }
+
+    fun onDeadLinePicked(year: Int, month: Int, dayOfMonth: Int) {
+        taskDeadline.value = "${year}/${month}/${dayOfMonth}"
+        // TODO: Continue Time Picker Dialog
+        _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_COMMON)
     }
 
     // Confirm before deleting
@@ -103,26 +112,24 @@ class TaskDetailViewModel : ViewModel() {
     // Create new Task from the current Task on the Detail Screen
     private fun createNewTask() {
         // check whether content is inputted
-        val newTask = if (taskContent.value != null) {
-            Task(title = taskTitle.value!!, content = taskContent.value, deadLine = null)
-        } else {
-            Task(title = taskTitle.value!!, content = null, deadLine = null)
-        }
+        val newTask = Task(
+            title = taskTitle.value!!,
+            content = taskContent.value,
+            deadLine = taskDeadline.value
+        )
         insertTask(newTask)
     }
 
     // Update the current existingTask on the Detail Screen
     private fun updateExistingTask() {
-        val updatedTask = if (taskContent.value != null) {
+        val updatedTask =
             Task(
                 id = taskId,
+                // taskTitle has already been validated by isEntryValid()
                 title = taskTitle.value!!,
-                content = taskContent.value!!,
-                deadLine = null
+                content = taskContent.value,
+                deadLine = taskDeadline.value
             )
-        } else {
-            Task(id = taskId, title = taskTitle.value!!, content = null, deadLine = null)
-        }
         updateTask(updatedTask)
     }
 
