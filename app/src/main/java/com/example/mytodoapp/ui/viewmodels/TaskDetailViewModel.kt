@@ -1,6 +1,5 @@
 package com.example.mytodoapp.ui.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,8 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class TaskDetailViewModel : ViewModel() {
 
@@ -49,7 +46,7 @@ class TaskDetailViewModel : ViewModel() {
                     taskContent.value = task.content
                 }
                 task.deadLine?.let {
-                    taskDeadline.value = it.toString()
+                    taskDeadline.value = it
                 }
             }
             _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_COMMON)
@@ -78,12 +75,16 @@ class TaskDetailViewModel : ViewModel() {
     }
 
     fun setDeadline() {
-        _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_DEADLINE)
+        _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_DEADLINE_DATE)
     }
 
-    fun onDeadLinePicked(year: Int, month: Int, dayOfMonth: Int) {
-        taskDeadline.value = "${year}/${month}/${dayOfMonth}"
-        // TODO: Continue Time Picker Dialog
+    fun onDeadLineDatePicked(year: Int, month: Int, dayOfMonth: Int) {
+        taskDeadline.value = "$year/${month}/${dayOfMonth}"
+        _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_DEADLINE_TIME)
+    }
+
+    fun onDeadLineTimePicked(hourOfDay: Int, minute: Int) {
+        taskDeadline.value = "${taskDeadline.value} ${hourOfDay}:${minute}"
         _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_COMMON)
     }
 

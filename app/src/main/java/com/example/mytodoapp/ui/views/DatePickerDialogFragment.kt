@@ -2,11 +2,16 @@ package com.example.mytodoapp.ui.views
 
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import java.util.*
 
 class DatePickerDialogFragment : DialogFragment() {
+
+    // Instantiated in onAttach with class cast validation
+    private lateinit var listener: DatePickerDialog.OnDateSetListener
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -16,11 +21,19 @@ class DatePickerDialogFragment : DialogFragment() {
         return DatePickerDialog(
             requireContext(),
             // parentFragment must implement OnDataSetListener
-            parentFragment as DatePickerDialog.OnDateSetListener,
+            listener,
             year,
             month,
             day
         )
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            listener = parentFragment as DatePickerDialog.OnDateSetListener
+        } catch (e: ClassCastException) {
+            throw ClassCastException(("$context must implement OnDateSetListener"))
+        }
+    }
 }
