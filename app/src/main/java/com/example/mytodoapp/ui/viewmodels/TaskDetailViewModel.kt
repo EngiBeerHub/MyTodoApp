@@ -85,7 +85,11 @@ class TaskDetailViewModel : ViewModel() {
 
     fun onDeadLineTimePicked(hourOfDay: Int, minute: Int) {
         taskDeadline.value = "${taskDeadline.value} ${hourOfDay}:${minute}"
-        _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_COMMON)
+        if (taskId == 0) {
+            _uiState.value = _uiState.value.copy(mode = Mode.CREATE)
+        } else {
+            _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_COMMON)
+        }
     }
 
     // Confirm before deleting
