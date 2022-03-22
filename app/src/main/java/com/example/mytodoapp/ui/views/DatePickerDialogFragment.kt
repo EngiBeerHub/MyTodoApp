@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import com.example.mytodoapp.R
 import java.util.*
 
 class DatePickerDialogFragment(private val onCancelClicked: DialogInterface.OnClickListener) :
@@ -27,7 +28,13 @@ class DatePickerDialogFragment(private val onCancelClicked: DialogInterface.OnCl
             year,
             month,
             day
-        ).apply { setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", onCancelClicked) }
+        ).apply {
+            setButton(
+                DialogInterface.BUTTON_NEGATIVE,
+                getString(R.string.button_cancel_label),
+                onCancelClicked
+            )
+        }
     }
 
     override fun onAttach(context: Context) {

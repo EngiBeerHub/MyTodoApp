@@ -1,9 +1,12 @@
 package com.example.mytodoapp.ui.viewmodels
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.example.mytodoapp.ToDoApplication
 import com.example.mytodoapp.data.Task
 import com.example.mytodoapp.data.TaskDao
@@ -16,7 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class TaskDetailViewModel : ViewModel() {
+class TaskDetailViewModel(application: Application) : ViewModel() {
 
     // Values for View state
     private val _uiState = MutableStateFlow(TaskDetailUiState(Mode.DEFAULT, true))
@@ -30,6 +33,9 @@ class TaskDetailViewModel : ViewModel() {
 
     // DAO to handle Task table
     private val taskDao: TaskDao = ToDoApplication.database.taskDao()
+
+    // WorkManager to handle Notification
+    private val workManager = WorkManager.getInstance(application)
 
     // Bind current Task to the Detail if it exist
     fun bindTask(taskId: Int) {
@@ -124,6 +130,7 @@ class TaskDetailViewModel : ViewModel() {
             content = taskContent.value,
             deadLine = taskDeadline.value
         )
+        createNotificationForDeadLine()
         insertTask(newTask)
     }
 
@@ -137,7 +144,12 @@ class TaskDetailViewModel : ViewModel() {
                 content = taskContent.value,
                 deadLine = taskDeadline.value
             )
+        createNotificationForDeadLine()
         updateTask(updatedTask)
+    }
+
+    private fun createNotificationForDeadLine() {
+        workManager.enqueue(OneTimeWorkRequest.from(NotificationWorker::class.java))
     }
 
     private fun insertTask(task: Task) {
@@ -156,8 +168,14 @@ class TaskDetailViewModel : ViewModel() {
         }
     }
 
-    private fun workManagerSample() {
-        val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-    }
+}
 
+class TaskDetailViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return if (modelClass.isAssignableFrom(TaskDetailViewModel::class.java)) {
+            TaskDetailViewModel(application) as T
+        } else {
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+    }
 }

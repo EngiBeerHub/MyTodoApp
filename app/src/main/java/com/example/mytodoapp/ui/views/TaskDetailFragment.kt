@@ -1,11 +1,9 @@
 package com.example.mytodoapp.ui.views
 
 import android.app.DatePickerDialog
-import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +11,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
 import android.widget.TimePicker
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -24,8 +20,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.mytodoapp.R
+import com.example.mytodoapp.ToDoApplication
 import com.example.mytodoapp.databinding.FragmentTaskDetailBinding
 import com.example.mytodoapp.ui.viewmodels.TaskDetailViewModel
+import com.example.mytodoapp.ui.viewmodels.TaskDetailViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -38,7 +36,11 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
     private lateinit var binding: FragmentTaskDetailBinding
 
     // ViewModel corresponding to this Fragment
-    private val viewModel: TaskDetailViewModel by viewModels()
+    private val viewModel: TaskDetailViewModel by viewModels {
+        TaskDetailViewModelFactory(
+            ToDoApplication()
+        )
+    }
 
     // arguments from Task List Fragment
     private val navigationArgs: TaskDetailFragmentArgs by navArgs()
@@ -73,8 +75,14 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                             ).show()
                             viewModel.onEventCompleted()
                         }
-                        Mode.UPDATE_DEADLINE_DATE -> showDatePickerDialog()
-                        Mode.UPDATE_DEADLINE_TIME -> showTimePickerDialog()
+                        Mode.UPDATE_DEADLINE_DATE -> {
+                            hideKeyBoard()
+                            showDatePickerDialog()
+                        }
+                        Mode.UPDATE_DEADLINE_TIME -> {
+                            hideKeyBoard()
+                            showTimePickerDialog()
+                        }
                         Mode.SUCCESS_CREATE -> {
                             hideKeyBoard()
                             // Show Snack bar
@@ -121,33 +129,6 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
         val taskId = navigationArgs.taskId
         // Bind the Task to View whether it is new or existing.
         viewModel.bindTask(taskId)
-
-        // FIXME: This is just a sample of Notification
-        val intent = Intent(requireContext(), MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val pendingIntent: PendingIntent =
-            PendingIntent.getActivity(
-                requireContext(),
-                0,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE
-            )
-
-        val notification = NotificationCompat.Builder(
-            requireContext(),
-            getString(R.string.notification_channel_id)
-        ).apply {
-            setSmallIcon(R.drawable.ic_baseline_check_circle_outline_24)
-            setContentTitle("Todo App")
-            setContentText("This is a sample notification.")
-            priority = NotificationCompat.PRIORITY_DEFAULT
-            setContentIntent(pendingIntent)
-            setAutoCancel(true)
-        }.build()
-        with(NotificationManagerCompat.from(requireContext())) {
-            notify(1, notification)
-        }
     }
 
     private fun hideKeyBoard() {
