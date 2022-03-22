@@ -3,11 +3,13 @@ package com.example.mytodoapp.ui.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.OneTimeWorkRequestBuilder
 import com.example.mytodoapp.ToDoApplication
 import com.example.mytodoapp.data.Task
 import com.example.mytodoapp.data.TaskDao
 import com.example.mytodoapp.ui.views.Mode
 import com.example.mytodoapp.ui.views.TaskDetailUiState
+import com.example.mytodoapp.workers.NotificationWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -78,6 +80,10 @@ class TaskDetailViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_DEADLINE_DATE)
     }
 
+    fun onSetDeadLineCanceled() {
+        resetStatus()
+    }
+
     fun onDeadLineDatePicked(year: Int, month: Int, dayOfMonth: Int) {
         taskDeadline.value = "$year/${month}/${dayOfMonth}"
         _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_DEADLINE_TIME)
@@ -85,11 +91,7 @@ class TaskDetailViewModel : ViewModel() {
 
     fun onDeadLineTimePicked(hourOfDay: Int, minute: Int) {
         taskDeadline.value = "${taskDeadline.value} ${hourOfDay}:${minute}"
-        if (taskId == 0) {
-            _uiState.value = _uiState.value.copy(mode = Mode.CREATE)
-        } else {
-            _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_COMMON)
-        }
+        resetStatus()
     }
 
     // Confirm before deleting
@@ -144,6 +146,18 @@ class TaskDetailViewModel : ViewModel() {
 
     private fun updateTask(task: Task) {
         viewModelScope.launch { taskDao.update(task) }
+    }
+
+    private fun resetStatus() {
+        if (taskId == 0) {
+            _uiState.value = _uiState.value.copy(mode = Mode.CREATE)
+        } else {
+            _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_COMMON)
+        }
+    }
+
+    private fun workManagerSample() {
+        val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
     }
 
 }

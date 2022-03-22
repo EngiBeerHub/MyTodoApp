@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,7 +31,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialogListener,
-    DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+    DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener,
+    DialogInterface.OnClickListener {
 
     // Binding object instance corresponding to the fragment_task_list.xml
     private lateinit var binding: FragmentTaskDetailBinding
@@ -121,11 +123,6 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
         viewModel.bindTask(taskId)
 
         // FIXME: This is just a sample of Notification
-        val builder = NotificationCompat.Builder(
-            requireContext(),
-            getString(R.string.notification_channel_id)
-        )
-
         val intent = Intent(requireContext(), MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -137,7 +134,10 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                 PendingIntent.FLAG_IMMUTABLE
             )
 
-        val notification = builder.apply {
+        val notification = NotificationCompat.Builder(
+            requireContext(),
+            getString(R.string.notification_channel_id)
+        ).apply {
             setSmallIcon(R.drawable.ic_baseline_check_circle_outline_24)
             setContentTitle("Todo App")
             setContentText("This is a sample notification.")
@@ -158,13 +158,13 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
     }
 
     private fun showDatePickerDialog() {
-        val datePickerDialog = DatePickerDialogFragment()
+        val datePickerDialog = DatePickerDialogFragment(this)
         // Add DatePickerDialogFragment as a child fragment
         datePickerDialog.show(childFragmentManager, "DatePickerDialogFragment")
     }
 
     private fun showTimePickerDialog() {
-        val timePickerDialog = TimePickerDialogFragment()
+        val timePickerDialog = TimePickerDialogFragment(this)
         // Add TimePickerDialogFragment as a child fragment
         timePickerDialog.show(childFragmentManager, "TimePickerDialogFragment")
     }
@@ -198,5 +198,11 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
     // Called when TimePickerDialog saved
     override fun onTimeSet(timePicker: TimePicker?, hourOfDay: Int, minute: Int) {
         viewModel.onDeadLineTimePicked(hourOfDay, minute)
+    }
+
+    override fun onClick(dialog: DialogInterface?, buttonId: Int) {
+        if (buttonId == DialogInterface.BUTTON_NEGATIVE) {
+            viewModel.onSetDeadLineCanceled()
+        }
     }
 }

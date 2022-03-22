@@ -3,11 +3,13 @@ package com.example.mytodoapp.ui.views
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import java.util.*
 
-class TimePickerDialogFragment : DialogFragment() {
+class TimePickerDialogFragment(private val onCancelClicked: DialogInterface.OnClickListener) :
+    DialogFragment() {
 
     // Instantiated in onAttach with class cast validation
     private lateinit var listener: TimePickerDialog.OnTimeSetListener
@@ -24,7 +26,7 @@ class TimePickerDialogFragment : DialogFragment() {
             hourOfDay,
             minute,
             true
-        )
+        ).apply { setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", onCancelClicked) }
     }
 
     override fun onAttach(context: Context) {
