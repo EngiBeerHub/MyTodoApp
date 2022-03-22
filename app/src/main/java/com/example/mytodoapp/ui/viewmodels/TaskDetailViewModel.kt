@@ -6,18 +6,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.mytodoapp.ToDoApplication
 import com.example.mytodoapp.data.Task
 import com.example.mytodoapp.data.TaskDao
-import com.example.mytodoapp.ui.views.Mode
-import com.example.mytodoapp.ui.views.TaskDetailUiState
+import com.example.mytodoapp.ui.Mode
+import com.example.mytodoapp.ui.TaskDetailUiState
 import com.example.mytodoapp.workers.NotificationWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.Duration
 
 class TaskDetailViewModel(application: Application) : ViewModel() {
 
@@ -149,7 +151,10 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
     }
 
     private fun createNotificationForDeadLine() {
-        workManager.enqueue(OneTimeWorkRequest.from(NotificationWorker::class.java))
+        val notificationWorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+            .setInitialDelay(Duration.ofSeconds(10))
+            .build()
+        workManager.enqueue(notificationWorkRequest)
     }
 
     private fun insertTask(task: Task) {

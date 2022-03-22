@@ -1,4 +1,4 @@
-package com.example.mytodoapp.ui.views
+package com.example.mytodoapp.ui
 
 data class TaskDetailUiState(
     val mode: Mode,
