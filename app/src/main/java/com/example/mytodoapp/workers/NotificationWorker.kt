@@ -7,6 +7,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.example.mytodoapp.Constants
 import com.example.mytodoapp.R
 import com.example.mytodoapp.ui.views.MainActivity
 
@@ -32,14 +33,14 @@ class NotificationWorker(context: Context, workerParams: WorkerParameters) :
             applicationContext.getString(R.string.notification_channel_id)
         ).apply {
             setSmallIcon(R.drawable.ic_baseline_check_circle_outline_24)
-            setContentTitle("Todo App")
-            setContentText("This is a sample notification.")
+            setContentTitle(inputData.getString(Constants.KEY_WORK_DATA_TASK_TITLE))
+            setContentText(inputData.getString(Constants.KEY_WORK_DATA_TASK_CONTENT))
             priority = NotificationCompat.PRIORITY_DEFAULT
             setContentIntent(pendingIntent)
             setAutoCancel(true)
         }.build()
         with(NotificationManagerCompat.from(applicationContext)) {
-            notify(1, notification)
+            notify(inputData.getInt(Constants.KEY_WORK_DATA_TASK_ID, 0), notification)
         }
         return Result.success()
     }

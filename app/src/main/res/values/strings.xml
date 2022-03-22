@@ -28,5 +28,6 @@
     <string name="snackbar_message_success_create">A new task is created successfully.</string>
     <string name="snackbar_message_success_update">The task is updated successfully.</string>
     <string name="snackbar_message_success_delete">The task is deleted successfully.</string>
+    <string name="key_work_data_task_id">TASK_ID</string>
 
 </resources>

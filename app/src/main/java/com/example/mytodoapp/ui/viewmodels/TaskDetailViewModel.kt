@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.workDataOf
+import com.example.mytodoapp.Constants
 import com.example.mytodoapp.ToDoApplication
 import com.example.mytodoapp.data.Task
 import com.example.mytodoapp.data.TaskDao
@@ -104,7 +106,7 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
         yearOfDeadLine = year
         monthOfDeadLine = month
         dayOfMonthOfDeadLine = dayOfMonth
-        taskDeadline.value = "$year/${month}/${dayOfMonth} 0:00"
+        taskDeadline.value = "$year/${month}/${dayOfMonth}"
         _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_DEADLINE_TIME)
     }
 
@@ -177,8 +179,16 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
             ZoneId.systemDefault()
         ).toEpochSecond()
         delayUntilTaskDeadLine = deadLine - now
+
         val notificationWorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
             .setInitialDelay(Duration.ofSeconds(delayUntilTaskDeadLine))
+            .setInputData(
+                workDataOf(
+                    Constants.KEY_WORK_DATA_TASK_ID to taskId,
+                    Constants.KEY_WORK_DATA_TASK_TITLE to taskTitle.value,
+                    Constants.KEY_WORK_DATA_TASK_CONTENT to taskContent.value
+                )
+            )
             .build()
         workManager.enqueue(notificationWorkRequest)
     }
