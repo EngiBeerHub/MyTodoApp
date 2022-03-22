@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.mytodoapp.ToDoApplication
@@ -20,6 +19,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Duration
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class TaskDetailViewModel(application: Application) : ViewModel() {
 
@@ -32,6 +33,12 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
     val taskTitle: MutableLiveData<String> = MutableLiveData()
     val taskContent: MutableLiveData<String> = MutableLiveData()
     val taskDeadline: MutableLiveData<String> = MutableLiveData()
+    private var yearOfDeadLine: Int = 0
+    private var monthOfDeadLine: Int = 0
+    private var dayOfMonthOfDeadLine: Int = 0
+    private var hourOfDayOfDeadLine: Int = 0
+    private var minuteOfDeadLine: Int = 0
+    private var delayUntilTaskDeadLine: Long = 0
 
     // DAO to handle Task table
     private val taskDao: TaskDao = ToDoApplication.database.taskDao()
@@ -92,12 +99,19 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
         resetStatus()
     }
 
+    // Called when specific date is picked in DatePickerDialog
     fun onDeadLineDatePicked(year: Int, month: Int, dayOfMonth: Int) {
-        taskDeadline.value = "$year/${month}/${dayOfMonth}"
+        yearOfDeadLine = year
+        monthOfDeadLine = month
+        dayOfMonthOfDeadLine = dayOfMonth
+        taskDeadline.value = "$year/${month}/${dayOfMonth} 0:00"
         _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_DEADLINE_TIME)
     }
 
+    // Called when specific time is picked in TimePickerDialog
     fun onDeadLineTimePicked(hourOfDay: Int, minute: Int) {
+        hourOfDayOfDeadLine = hourOfDay
+        minuteOfDeadLine = minute
         taskDeadline.value = "${taskDeadline.value} ${hourOfDay}:${minute}"
         resetStatus()
     }
@@ -126,18 +140,18 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
 
     // Create new Task from the current Task on the Detail Screen
     private fun createNewTask() {
-        // check whether content is inputted
+        if (!taskDeadline.value.isNullOrEmpty()) createNotificationForDeadLine()
         val newTask = Task(
             title = taskTitle.value!!,
             content = taskContent.value,
             deadLine = taskDeadline.value
         )
-        createNotificationForDeadLine()
         insertTask(newTask)
     }
 
     // Update the current existingTask on the Detail Screen
     private fun updateExistingTask() {
+        if (!taskDeadline.value.isNullOrEmpty()) createNotificationForDeadLine()
         val updatedTask =
             Task(
                 id = taskId,
@@ -146,13 +160,25 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
                 content = taskContent.value,
                 deadLine = taskDeadline.value
             )
-        createNotificationForDeadLine()
         updateTask(updatedTask)
     }
 
+    // Create Notification when saving Task
     private fun createNotificationForDeadLine() {
+        val now = ZonedDateTime.now().toEpochSecond()
+        val deadLine = ZonedDateTime.of(
+            yearOfDeadLine,
+            monthOfDeadLine,
+            dayOfMonthOfDeadLine,
+            hourOfDayOfDeadLine,
+            minuteOfDeadLine,
+            0,
+            0,
+            ZoneId.systemDefault()
+        ).toEpochSecond()
+        delayUntilTaskDeadLine = deadLine - now
         val notificationWorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-            .setInitialDelay(Duration.ofSeconds(10))
+            .setInitialDelay(Duration.ofSeconds(delayUntilTaskDeadLine))
             .build()
         workManager.enqueue(notificationWorkRequest)
     }
@@ -178,6 +204,7 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
 class TaskDetailViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(TaskDetailViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
             TaskDetailViewModel(application) as T
         } else {
             throw IllegalArgumentException("Unknown ViewModel class")
