@@ -40,7 +40,6 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
     private var dayOfMonthOfDeadLine: Int = 0
     private var hourOfDayOfDeadLine: Int = 0
     private var minuteOfDeadLine: Int = 0
-    private var delayUntilTaskDeadLine: Long = 0
 
     // DAO to handle Task table
     private val taskDao: TaskDao = ToDoApplication.database.taskDao()
@@ -167,21 +166,8 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
 
     // Create Notification when saving Task
     private fun createNotificationForDeadLine() {
-        val now = ZonedDateTime.now().toEpochSecond()
-        val deadLine = ZonedDateTime.of(
-            yearOfDeadLine,
-            monthOfDeadLine,
-            dayOfMonthOfDeadLine,
-            hourOfDayOfDeadLine,
-            minuteOfDeadLine,
-            0,
-            0,
-            ZoneId.systemDefault()
-        ).toEpochSecond()
-        delayUntilTaskDeadLine = deadLine - now
-
         val notificationWorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-            .setInitialDelay(Duration.ofSeconds(delayUntilTaskDeadLine))
+            .setInitialDelay(Duration.ofSeconds(getSecondsUntilTaskDeadLine()))
             .setInputData(
                 workDataOf(
                     Constants.KEY_WORK_DATA_TASK_ID to taskId,
@@ -191,6 +177,21 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
             )
             .build()
         workManager.enqueue(notificationWorkRequest)
+    }
+
+    private fun getSecondsUntilTaskDeadLine(): Long {
+        val now = ZonedDateTime.now().toEpochSecond()
+        val deadLine = ZonedDateTime.of(
+            this.yearOfDeadLine,
+            this.monthOfDeadLine,
+            this.dayOfMonthOfDeadLine,
+            this.hourOfDayOfDeadLine,
+            this.minuteOfDeadLine,
+            0,
+            0,
+            ZoneId.systemDefault()
+        ).toEpochSecond()
+        return deadLine - now
     }
 
     private fun insertTask(task: Task) {
