@@ -3,8 +3,10 @@ package com.example.mytodoapp.workers
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.navigation.NavDeepLinkBuilder
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.mytodoapp.Constants
@@ -20,13 +22,23 @@ class NotificationWorker(context: Context, workerParams: WorkerParameters) :
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
-        val pendingIntent: PendingIntent =
-            PendingIntent.getActivity(
-                applicationContext,
-                0,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE
-            )
+//        val pendingIntent: PendingIntent =
+//            PendingIntent.getActivity(
+//                applicationContext,
+//                0,
+//                intent,
+//                PendingIntent.FLAG_IMMUTABLE
+//            )
+        val args = Bundle()
+        args.putInt(
+            Constants.KEY_WORK_DATA_TASK_ID,
+            inputData.getInt(Constants.KEY_WORK_DATA_TASK_ID, 0)
+        )
+        val pendingIntent = NavDeepLinkBuilder(applicationContext)
+            .setGraph(R.navigation.nav_graph)
+            .setDestination(R.id.taskDetailFragment)
+            .setArguments(args)
+            .createPendingIntent()
 
         val notification = NotificationCompat.Builder(
             applicationContext,

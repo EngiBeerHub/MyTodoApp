@@ -11,4 +11,5 @@ data class Task(
     val title: String,
     val content: String?,
     val deadLine: String?
+    // TODO: Add Has Notification Flag
 )

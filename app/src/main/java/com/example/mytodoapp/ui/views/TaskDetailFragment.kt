@@ -19,6 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.mytodoapp.Constants
 import com.example.mytodoapp.R
 import com.example.mytodoapp.ToDoApplication
 import com.example.mytodoapp.databinding.FragmentTaskDetailBinding
@@ -60,6 +61,19 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        /**
+         * Bind Task to the Task Detail Fragment
+         */
+        // Passed Task by tapping a Task in the List
+        var taskId = navigationArgs.taskId
+        // If opened from a Notification, get ID from bundle.
+        if (taskId == 0) {
+            arguments?.let {
+                taskId = it.getInt(Constants.KEY_WORK_DATA_TASK_ID)
+            }
+        }
+        // Bind the Task to View whether it is new or existing.
+        viewModel.bindTask(taskId)
         /**
          * Subscribe TaskDetailViewModel's events
          * and handle changing View
@@ -126,10 +140,6 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                 }
             }
         }
-        // Passed by Task List by tapping each Task
-        val taskId = navigationArgs.taskId
-        // Bind the Task to View whether it is new or existing.
-        viewModel.bindTask(taskId)
     }
 
     private fun hideKeyBoard() {

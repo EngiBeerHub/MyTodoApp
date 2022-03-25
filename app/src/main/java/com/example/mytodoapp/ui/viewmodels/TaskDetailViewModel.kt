@@ -105,7 +105,8 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
         yearOfDeadLine = year
         monthOfDeadLine = month
         dayOfMonthOfDeadLine = dayOfMonth
-        taskDeadline.value = "$year/${month}/${dayOfMonth}"
+        taskDeadline.value =
+            "$year/${month.toString().padStart(2, '0')}/${dayOfMonth.toString().padStart(2, '0')}"
         _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_DEADLINE_TIME)
     }
 
@@ -113,7 +114,9 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
     fun onDeadLineTimePicked(hourOfDay: Int, minute: Int) {
         hourOfDayOfDeadLine = hourOfDay
         minuteOfDeadLine = minute
-        taskDeadline.value = "${taskDeadline.value} ${hourOfDay}:${minute}"
+        taskDeadline.value = "${taskDeadline.value} ${hourOfDay.toString().padStart(2, '0')}:${
+            minute.toString().padStart(2, '0')
+        }"
         resetStatus()
     }
 
