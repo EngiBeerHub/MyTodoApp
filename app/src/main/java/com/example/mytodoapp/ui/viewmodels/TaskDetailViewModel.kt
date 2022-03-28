@@ -49,8 +49,9 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
 
     // Bind current Task to the Detail if it exist
     fun bindTask(taskId: Int) {
+        this.taskId = taskId
         // If taskId is default value, this is a new Task
-        if (taskId == 0) {
+        if (isNewTask()) {
             _uiState.value = _uiState.value.copy(mode = Mode.CREATE, btDeleteVisible = false)
         } else {
             // Else, bind the existing Task to the view
@@ -92,6 +93,10 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
         _uiState.value = _uiState.value.copy(mode = Mode.DEFAULT)
     }
 
+    fun onErrorDialogCompleted() {
+        resetStatus()
+    }
+
     fun setDeadline() {
         _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_DEADLINE_DATE)
     }
@@ -128,7 +133,7 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
     // Delete the existing Task on the Detail screen
     fun deleteCurrentTask() {
         // Only in the existing Task is retrieved and mode UPDATE_COMMON
-        if (taskId != 0 && _uiState.value.mode == Mode.CONFIRM_DELETE) {
+        if (!isNewTask() && _uiState.value.mode == Mode.CONFIRM_DELETE) {
             viewModelScope.launch {
                 val task = taskDao.findById(taskId)
                 taskDao.delete(task)
@@ -142,15 +147,20 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
         return !taskTitle.value.isNullOrEmpty()
     }
 
+    // Return whether the Task is new and not saved to Room yet.
+    private fun isNewTask(): Boolean = taskId == 0
+
     // Create new Task from the current Task on the Detail Screen
     private fun createNewTask() {
-        yearOfDeadLine?.let { createNotificationForDeadLine() }
         val newTask = Task(
             title = taskTitle.value!!,
             content = taskContent.value,
             deadLine = taskDeadline.value
         )
-        insertTask(newTask)
+        viewModelScope.launch {
+            taskId = taskDao.insertAndRetrieve(newTask).toInt()
+            yearOfDeadLine?.let { createNotificationForDeadLine() }
+        }
     }
 
     // Update the current existingTask on the Detail Screen
@@ -201,16 +211,12 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
         }
     }
 
-    private fun insertTask(task: Task) {
-        viewModelScope.launch { taskDao.insert(task) }
-    }
-
     private fun updateTask(task: Task) {
         viewModelScope.launch { taskDao.update(task) }
     }
 
     private fun resetStatus() {
-        if (taskId == 0) {
+        if (isNewTask()) {
             _uiState.value = _uiState.value.copy(mode = Mode.CREATE)
         } else {
             _uiState.value = _uiState.value.copy(mode = Mode.UPDATE_COMMON)

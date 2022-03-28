@@ -88,7 +88,7 @@ class TaskDetailFragment : Fragment(), DeleteTaskDialogFragment.DeleteTaskDialog
                                 view, getString(R.string.snackbar_message_error_validation),
                                 Snackbar.LENGTH_SHORT
                             ).show()
-                            viewModel.onEventCompleted()
+                            viewModel.onErrorDialogCompleted()
                         }
                         Mode.UPDATE_DEADLINE_DATE -> {
                             hideKeyBoard()

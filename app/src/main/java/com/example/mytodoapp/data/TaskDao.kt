@@ -18,6 +18,9 @@ interface TaskDao {
     suspend fun insert(task: Task)
 
     @Insert
+    suspend fun insertAndRetrieve(task: Task): Long
+
+    @Insert
     suspend fun insertAll(vararg tasks: Task)
 
     @Update
