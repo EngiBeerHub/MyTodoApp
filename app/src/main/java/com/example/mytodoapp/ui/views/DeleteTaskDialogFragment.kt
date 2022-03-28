@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.example.mytodoapp.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /**
  * A Dialog to confirm deleting a task to the user.
@@ -17,7 +18,7 @@ class DeleteTaskDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
-            val builder = AlertDialog.Builder(it)
+            val builder = MaterialAlertDialogBuilder(it)
             builder.apply {
                 setTitle(getString(R.string.dialog_delete_title))
                 setMessage(getString(R.string.dialog_delete_message))
