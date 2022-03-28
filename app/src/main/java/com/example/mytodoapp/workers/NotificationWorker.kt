@@ -1,6 +1,5 @@
 package com.example.mytodoapp.workers
 
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -22,13 +21,6 @@ class NotificationWorker(context: Context, workerParams: WorkerParameters) :
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
-//        val pendingIntent: PendingIntent =
-//            PendingIntent.getActivity(
-//                applicationContext,
-//                0,
-//                intent,
-//                PendingIntent.FLAG_IMMUTABLE
-//            )
         val args = Bundle()
         args.putInt(
             Constants.KEY_WORK_DATA_TASK_ID,

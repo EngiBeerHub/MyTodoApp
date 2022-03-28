@@ -10,7 +10,6 @@ import com.example.mytodoapp.data.TaskDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.LocalDateTime
 
 class TaskListViewModel : ViewModel() {
 
@@ -45,8 +44,6 @@ class TaskListViewModel : ViewModel() {
         viewModelScope.launch {
             val rowCount = withContext(Dispatchers.Default) { taskDao.getRowCount() }
             if (rowCount == 0) {
-                // TODO: Format now to the corresponding type of Task.
-                val now = LocalDateTime.now()
                 taskDao.insertAll(
                     Task(0, true, "Sample Task1", "This is a sample task.", "2022/3/18 20:20"),
                     Task(0, false, "Sample Task2", "This is a sample task.", null),

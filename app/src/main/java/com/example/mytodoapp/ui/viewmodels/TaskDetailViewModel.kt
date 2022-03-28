@@ -35,11 +35,11 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
     val taskTitle: MutableLiveData<String> = MutableLiveData()
     val taskContent: MutableLiveData<String> = MutableLiveData()
     val taskDeadline: MutableLiveData<String> = MutableLiveData()
-    private var yearOfDeadLine: Int = 0
-    private var monthOfDeadLine: Int = 0
-    private var dayOfMonthOfDeadLine: Int = 0
-    private var hourOfDayOfDeadLine: Int = 0
-    private var minuteOfDeadLine: Int = 0
+    private var yearOfDeadLine: Int? = null
+    private var monthOfDeadLine: Int? = null
+    private var dayOfMonthOfDeadLine: Int? = null
+    private var hourOfDayOfDeadLine: Int? = null
+    private var minuteOfDeadLine: Int? = null
 
     // DAO to handle Task table
     private val taskDao: TaskDao = ToDoApplication.database.taskDao()
@@ -144,7 +144,7 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
 
     // Create new Task from the current Task on the Detail Screen
     private fun createNewTask() {
-        if (!taskDeadline.value.isNullOrEmpty()) createNotificationForDeadLine()
+        yearOfDeadLine?.let { createNotificationForDeadLine() }
         val newTask = Task(
             title = taskTitle.value!!,
             content = taskContent.value,
@@ -155,7 +155,7 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
 
     // Update the current existingTask on the Detail Screen
     private fun updateExistingTask() {
-        if (!taskDeadline.value.isNullOrEmpty()) createNotificationForDeadLine()
+        yearOfDeadLine?.let { createNotificationForDeadLine() }
         val updatedTask =
             Task(
                 id = taskId,
@@ -183,18 +183,22 @@ class TaskDetailViewModel(application: Application) : ViewModel() {
     }
 
     private fun getSecondsUntilTaskDeadLine(): Long {
-        val now = ZonedDateTime.now().toEpochSecond()
-        val deadLine = ZonedDateTime.of(
-            this.yearOfDeadLine,
-            this.monthOfDeadLine,
-            this.dayOfMonthOfDeadLine,
-            this.hourOfDayOfDeadLine,
-            this.minuteOfDeadLine,
-            0,
-            0,
-            ZoneId.systemDefault()
-        ).toEpochSecond()
-        return deadLine - now
+        if (yearOfDeadLine == null) {
+            throw Error("yearOfDeadline must not be null.")
+        } else {
+            val now = ZonedDateTime.now().toEpochSecond()
+            val deadLine = ZonedDateTime.of(
+                this.yearOfDeadLine!!,
+                this.monthOfDeadLine!!,
+                this.dayOfMonthOfDeadLine!!,
+                this.hourOfDayOfDeadLine!!,
+                this.minuteOfDeadLine!!,
+                0,
+                0,
+                ZoneId.systemDefault()
+            ).toEpochSecond()
+            return deadLine - now
+        }
     }
 
     private fun insertTask(task: Task) {
