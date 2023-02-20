@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             .setupWithNavController(navController)
     }
 
-    // Up button handing for navigation drawer
+    // Up button handling for navigation drawer
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration)

@@ -17,10 +17,6 @@ class NotificationWorker(context: Context, workerParams: WorkerParameters) :
 
     override fun doWork(): Result {
 
-        val intent = Intent(applicationContext, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-
         val args = Bundle()
         args.putInt(
             Constants.KEY_WORK_DATA_TASK_ID,
