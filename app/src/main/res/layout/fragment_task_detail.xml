@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.mytodoapp.ui.viewmodels.TaskDetailViewModel" />
+            type="com.engibeer.mytodoapp.ui.viewmodels.TaskDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

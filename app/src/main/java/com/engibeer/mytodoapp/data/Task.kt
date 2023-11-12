@@ -1,4 +1,4 @@
-package com.example.mytodoapp.data
+package com.engibeer.mytodoapp.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

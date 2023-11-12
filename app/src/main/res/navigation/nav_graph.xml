@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/taskListFragment"
-        android:name="com.example.mytodoapp.ui.views.TaskListFragment"
+        android:name="com.engibeer.mytodoapp.ui.views.TaskListFragment"
         android:label="All Todo"
         tools:layout="@layout/fragment_task_list">
         <action
@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/taskDetailFragment"
-        android:name="com.example.mytodoapp.ui.views.TaskDetailFragment"
+        android:name="com.engibeer.mytodoapp.ui.views.TaskDetailFragment"
         android:label="Detail"
         tools:layout="@layout/fragment_task_detail">
         <argument
@@ -39,6 +39,6 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.mytodoapp.ui.views.SettingsFragment"
+        android:name="com.engibeer.mytodoapp.ui.views.SettingsFragment"
         android:label="Settings" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.mytodoapp
+package com.engibeer.mytodoapp
 
 class Constants {
     companion object {

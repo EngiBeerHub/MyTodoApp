@@ -1,4 +1,4 @@
-package com.example.mytodoapp.ui
+package com.engibeer.mytodoapp.ui
 
 data class TaskDetailUiState(
     val mode: Mode,

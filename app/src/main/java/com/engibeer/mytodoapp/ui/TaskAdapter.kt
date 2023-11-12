@@ -1,4 +1,4 @@
-package com.example.mytodoapp.ui
+package com.engibeer.mytodoapp.ui
 
 import android.graphics.Paint
 import android.view.LayoutInflater
@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mytodoapp.data.Task
+import com.engibeer.mytodoapp.data.Task
 import com.example.mytodoapp.databinding.TaskRowBinding
-import com.example.mytodoapp.ui.viewmodels.TaskListViewModel
+import com.engibeer.mytodoapp.ui.viewmodels.TaskListViewModel
 
 /**
  * Adapter for simple RecyclerView

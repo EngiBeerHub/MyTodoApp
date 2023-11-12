@@ -1,4 +1,4 @@
-package com.example.mytodoapp
+package com.engibeer.mytodoapp
 
 import android.app.Application
 import android.app.NotificationChannel
@@ -9,7 +9,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
-import com.example.mytodoapp.data.AppDatabase
+import com.example.mytodoapp.R
+import com.engibeer.mytodoapp.data.AppDatabase
 
 // Application class to supply Room database instance
 class ToDoApplication : Application() {

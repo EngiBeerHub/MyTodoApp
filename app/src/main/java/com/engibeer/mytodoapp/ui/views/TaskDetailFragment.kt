@@ -1,4 +1,4 @@
-package com.example.mytodoapp.ui.views
+package com.engibeer.mytodoapp.ui.views
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -19,13 +19,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.mytodoapp.Constants
+import com.engibeer.mytodoapp.Constants
 import com.example.mytodoapp.R
-import com.example.mytodoapp.ToDoApplication
+import com.engibeer.mytodoapp.ToDoApplication
 import com.example.mytodoapp.databinding.FragmentTaskDetailBinding
-import com.example.mytodoapp.ui.Mode
-import com.example.mytodoapp.ui.viewmodels.TaskDetailViewModel
-import com.example.mytodoapp.ui.viewmodels.TaskDetailViewModelFactory
+import com.engibeer.mytodoapp.ui.Mode
+import com.engibeer.mytodoapp.ui.viewmodels.TaskDetailViewModel
+import com.engibeer.mytodoapp.ui.viewmodels.TaskDetailViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

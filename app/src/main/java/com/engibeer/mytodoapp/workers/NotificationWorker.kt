@@ -1,4 +1,4 @@
-package com.example.mytodoapp.workers
+package com.engibeer.mytodoapp.workers
 
 import android.content.Context
 import android.content.Intent
@@ -8,9 +8,9 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavDeepLinkBuilder
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.example.mytodoapp.Constants
+import com.engibeer.mytodoapp.Constants
 import com.example.mytodoapp.R
-import com.example.mytodoapp.ui.views.MainActivity
+import com.engibeer.mytodoapp.ui.views.MainActivity
 
 class NotificationWorker(context: Context, workerParams: WorkerParameters) :
     Worker(context, workerParams) {

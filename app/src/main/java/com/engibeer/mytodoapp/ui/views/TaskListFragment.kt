@@ -1,4 +1,4 @@
-package com.example.mytodoapp.ui.views
+package com.engibeer.mytodoapp.ui.views
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.mytodoapp.databinding.FragmentTaskListBinding
-import com.example.mytodoapp.ui.TaskAdapter
-import com.example.mytodoapp.ui.viewmodels.TaskListViewModel
+import com.engibeer.mytodoapp.ui.TaskAdapter
+import com.engibeer.mytodoapp.ui.viewmodels.TaskListViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
